@@ -1,0 +1,26 @@
+ @import url('https://fonts.googleapis.com/css?family=Bellefair|Stint+Ultra+Condensed');
+
+body {
+    font-family: 'Bellefair', serif;
+    background-color: #FFF;
+    /* width: 100vw; */
+    /* height: 100vh; */
+    /* overflow-x: hidden; */
+    color: #000;
+    font-size: 20px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a, a:link, a:hover, a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+h1, .accent-font {
+    font-family: 'Stint Ultra Condensed' !important;
+    /* letter-spacing: 1px; */
+    font-weight: 300;
+}
