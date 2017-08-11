@@ -6,13 +6,13 @@ import { NavLink } from 'react-router-dom';
 import Panel from './Panel';
 import Holder from './Holder';
 
-import paths from '../paths';
+import { websitePaths } from '../paths';
 
 const Menu = ({ classes }) => (
     <Holder className={classes.menuHolder}>
         <Panel className={cx(classes.menu, "accent-font")} element="ul">
             {
-                paths.map(({ path, name }, i) => (
+                websitePaths.map(({ path, name }, i) => (
                     <li key={i} className={classes.menuItem}>
                         <NavLink to={path} data-role="link" exact className={classes.link} activeClassName={classes.activeLink}>{name}</NavLink>
                     </li>

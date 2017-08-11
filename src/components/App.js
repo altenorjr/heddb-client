@@ -1,17 +1,18 @@
 import React from 'react';
+import { HashRouter, Switch, Route } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { BrowserRouter } from 'react-router-dom';
 
-import MasterPage from './MasterPage';
-import Routes from './Routes';
+import Website from './Website';
+import Admin from './Admin';
 
 const App = () => (
   <MuiThemeProvider>
-    <BrowserRouter>
-      <MasterPage>
-        <Routes />
-      </MasterPage>
-    </BrowserRouter>
+    <HashRouter>
+      <Switch>
+        <Route path="/admin" component={Admin} />
+        <Route path="/" component={Website} />
+      </Switch>
+    </HashRouter>
   </MuiThemeProvider>
 );
 

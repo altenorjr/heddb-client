@@ -4,7 +4,7 @@ import jss from 'react-jss';
 import TopBar from './TopBar';
 import Holder from './Holder';
 
-const UglyMasterPage = ({ children, classes, sheet }) => (
+const UglyWebsiteMasterPage = ({ children, classes, sheet }) => (
     <div>
         <TopBar />
         <Holder className={classes.body}>
@@ -13,10 +13,10 @@ const UglyMasterPage = ({ children, classes, sheet }) => (
     </div>
 );
 
-const MasterPage = jss({
+const WebsiteMasterPage = jss({
     body: {
         paddingTop: '224px'
     }
-})(UglyMasterPage);
+})(UglyWebsiteMasterPage);
 
-export default MasterPage;
+export default WebsiteMasterPage;
