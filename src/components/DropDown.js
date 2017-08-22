@@ -1,31 +1,29 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import jss from 'react-jss';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { List } from 'immutable';
 import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 
 import Popover from './Popover';
 import Badge from './Badge';
 
-const listOptions = (values, selectedValue) => values.filter(({ value }) => value !== selectedValue);
+const listOptions = (values, selectedValue) => values.filter((obj) => obj.get('value') !== selectedValue);
 
-const findSelectedValueText = (values, selectedValue) => values.find(({ value }) => value === selectedValue).text;
+const findSelectedValueText = (values, selectedValue) => {
+    return (values.find((obj) => obj.get('value') === selectedValue) || new Map()).get('text', '');
+}
 
-class UglyDropDown extends PureComponent {
+class DropDownUnstyled extends Component {
     static propTypes = {
-        items: PropTypes.arrayOf(PropTypes.shape({
-            text: PropTypes.string.isRequired,
-            value: PropTypes.string.isRequired,
-            count: PropTypes.number.isRequired
-        })),
+        items: PropTypes.instanceOf(List),
         selectedValue: PropTypes.string.isRequired,
         onSelectedValueChanged: PropTypes.func.isRequired,
         align: PropTypes.oneOf(['left', 'center', 'right'])
     }
 
     static defaultProps = {
-        align: 'left',
-        selectedValueText: text => text
+        align: 'left'
     }
 
     render = () => {
@@ -50,15 +48,22 @@ class UglyDropDown extends PureComponent {
                 )}>
                 <ul className={classes.items}>
                     {
-                        listOptions(items, selectedValue).map(({ value, text, count }, i) => (
-                            <li
-                                onTouchTap={() => onSelectedValueChanged(value)}
-                                className={cx(classes.item, classes.li)}
-                                key={i}>
-                                <div data-role="title" className={classes.title}>{text}</div>
-                                <Badge className={classes.badge} value={count} />
-                            </li>
-                        ))
+                        listOptions(items, selectedValue).map((item, i) => {
+                            const value = item.get('value');
+                            const text = item.get('text');
+                            const count = item.get('count');
+
+                            return (
+                                <li
+                                    onTouchTap={() => onSelectedValueChanged(value)}
+                                    className={cx(classes.item, classes.li)}
+                                    key={i}
+                                >
+                                    <div data-role="title" className={classes.title}>{text}</div>
+                                    <Badge className={classes.badge} value={count} />
+                                </li>
+                            );
+                        })
                     }
                 </ul>
             </Popover>
@@ -110,6 +115,6 @@ const DropDown = jss({
     badge: {
         order: ({ align }) => align !== 'right' ? 1 : 0
     }
-})(UglyDropDown);
+})(DropDownUnstyled);
 
 export default DropDown;

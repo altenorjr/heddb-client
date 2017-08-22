@@ -1,22 +1,16 @@
-import React from 'react';
-import { Switch, Route, withRouter } from 'react-router-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import React, { PureComponent } from 'react';
+import { Switch, Route } from 'react-router-dom';
 
-import { adminPaths } from '../paths';
+import Login from './Login';
+import AdminMasterPage from './AdminMasterPage';
 
-const theme = getMuiTheme({ fontFamily: 'Bellefair' })
-
-const Admin = (props) => (
-    <MuiThemeProvider>
+class Admin extends PureComponent {
+    render = () => (
         <Switch>
-            {
-                adminPaths.map(({ name, ...props }, i) => (
-                    <Route key={i} exact {...props} />
-                ))
-            }
+            <Route path="/admin/" strict exact component={Login} />
+            <Route path="/admin" component={AdminMasterPage} />
         </Switch>
-    </MuiThemeProvider>
-);
+    )
+}
 
-export default withRouter(Admin);
+export default Admin;

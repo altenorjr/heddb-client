@@ -1,38 +1,43 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import jss from 'react-jss';
-
-import { states as statesDefinition } from '../definitions/state';
-import { bands as bandsDefinition } from '../definitions/band';
+import { List } from 'immutable';
 
 import DropDown from './DropDown';
 import Bands from './Bands';
 import FilteredContainer from './FilteredContainer';
 
-import { bandStates, filterBands } from '../data';
+import {
+    selectState,
+    filterRecords
+} from '../redux/Bands';
 
 class UglyBrazilianBlues extends PureComponent {
     static propTypes = {
-        states: statesDefinition,
+        states: PropTypes.instanceOf(List),
+        bands: PropTypes.instanceOf(List),
         selectedState: PropTypes.string.isRequired,
-        onSelectedStateChanged: PropTypes.func.isRequired,
-        bands: bandsDefinition
+        selectState: PropTypes.func.isRequired,
+        filterRecords: PropTypes.func.isRequired
     }
 
     static defaultProps = {
         selectedState: 'all'
     }
 
-    groupedBands = () => this.props.states.filter(s => s.value !== 'all').map(({ text, value }) => ({
-        title: text,
-        bands: this.props.bands.filter(band => band.location.state === value)
+    componentDidMount = () => this.props.filterRecords({ state: 'all' });
+
+    groupedBands = () => this.props.states.filter(s => s.get('value') !== 'all').map((state) => ({
+        title: state.get('text'),
+        bands: this.props.bands.filter(band => band.get('state') === state.get('value'))
     }));
 
     render = () => {
         const {
             states,
             selectedState,
-            onSelectedStateChanged,
+            selectState,
             bands,
             classes
         } = this.props;
@@ -44,14 +49,16 @@ class UglyBrazilianBlues extends PureComponent {
                     <DropDown
                         items={states}
                         selectedValue={selectedState}
-                        onSelectedValueChanged={(state) => onSelectedStateChanged(state)}
+                        onSelectedValueChanged={(state) => selectState(state)}
                     />
                 ]}>
                 {
                     selectedState !== 'all' && (
                         <Bands
                             className={classes.bands}
-                            bands={bands} />
+                            bands={bands}
+                            showStateInformation
+                        />
 
                     )
                 }
@@ -63,7 +70,9 @@ class UglyBrazilianBlues extends PureComponent {
                                 <Bands
                                     title={title}
                                     className={classes.bands}
-                                    bands={bands} />
+                                    bands={bands} 
+                                    showStateInformation
+                                />
                             </div>
 
                         ))
@@ -102,24 +111,15 @@ const styles = {
 
 const BrazilianBlues = jss(styles)(UglyBrazilianBlues);
 
-export default BrazilianBlues;
+const mapStateToProps = (state) => ({
+    states: state.getIn(['bands', 'states'], new List()),
+    bands: state.getIn(['bands', 'data'], new List()),
+    selectedState: state.getIn(['bands', 'selectedState'], null)
+});
 
-export class BrazilianBluesConnected extends PureComponent {
-    state = {
-        selectedState: 'all'
-    }
+const mapDispatchToProps = {
+    selectState,
+    filterRecords 
+};
 
-    selectedStateChanged = (value) => this.setState(() => ({ selectedState: value }));
-
-    render = () => {
-        const { selectedState } = this.state;
-
-        return (
-            <BrazilianBlues
-                states={bandStates()}
-                onSelectedStateChanged={this.selectedStateChanged}
-                selectedState={selectedState}
-                bands={filterBands(selectedState)} />
-        );
-    }
-}
+export default connect(mapStateToProps, mapDispatchToProps)(BrazilianBlues)

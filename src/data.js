@@ -1,6 +1,7 @@
 import moment from 'moment';
 import unique from 'sugar/array/unique';
-import './setup';
+import { List } from 'immutable';
+// import './setup';
 
 export const bands = [{
     id: 'obijuba',
@@ -31,9 +32,9 @@ export const bands = [{
     pic: 'https://scontent.fgru5-1.fna.fbcdn.net/v/t1.0-9/10156060_627674030646981_5838362020994565101_n.jpg?oh=ad3261ba5587245b57a42111099c0934&oe=5A3589F2',
     social: ['https://www.facebook.com/obijuba', 'https://twitter.com/obijuba', 'https://www.instagram.com/obijuba/'],
     location: {
-        state: 'SP',
-        city: 'São Paulo',
-        map: 'https://www.google.com/maps/place/Selva+Club/@-23.5515095,-46.6528317,17z/data=!3m1!4b1!4m5!3m4!1s0x94ce584a87c560df:0xffe8a5234579cedc!8m2!3d-23.5515095!4d-46.650643?hl=pt-BR'
+        "state": "SP",
+        "city": "São Paulo",
+        "map": "https://www.google.com/maps/place/Selva+Club/@-23.5515095,-46.6528317,17z/data=!3m1!4b1!4m5!3m4!1s0x94ce584a87c560df:0xffe8a5234579cedc!8m2!3d-23.5515095!4d-46.650643?hl=pt-BR"
     }
 }, {
     id: 'big-chico',
@@ -77,73 +78,70 @@ export const bandStates = () => [
 
 export const venues = [{
     name: 'The Orleans Music Bar',
-    address: 'Rua Girassol, 398',
     phone: '(11) 3031-1780',
     location: {
-        state: 'SP',
-        city: 'São Paulo',
-        map: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3682.5947819094777!2d-47.05388148461997!3d-22.631602285152344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8ee9ba88dfa89%3A0x6131fced4b748be!2sBier+Trunk+Pub+Bar!5e0!3m2!1spt-BR!2sbr!4v1501479888146'
+        "address": "Rua Girassol, 398",
+        "state": "SP",
+        "city": "São Paulo",
+        "map": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3682.5947819094777!2d-47.05388148461997!3d-22.631602285152344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8ee9ba88dfa89%3A0x6131fced4b748be!2sBier+Trunk+Pub+Bar!5e0!3m2!1spt-BR!2sbr!4v1501479888146"
     }
 }, {
     name: 'Jardim das Delícias Bar & Bistrô',
-    address: 'Rua Belmiro Braga, 96',
     phone: '(11) 3032-6878',
     location: {
+        address: 'Rua Belmiro Braga, 96',
         state: 'SP',
         city: 'São Paulo',
         map: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3682.5947819094777!2d-47.05388148461997!3d-22.631602285152344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8ee9ba88dfa89%3A0x6131fced4b748be!2sBier+Trunk+Pub+Bar!5e0!3m2!1spt-BR!2sbr!4v1501479888146'
     }
 }, {
     name: 'PBier Trunk Pub Bar',
-    address: 'R. Campo de Pouso, 1162',
     phone: '(19) 3802-4550',
     location: {
+        address: 'R. Campo de Pouso, 1162',
         state: 'SP',
         city: 'Holambra',
         map: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3682.5947819094777!2d-47.05388148461997!3d-22.631602285152344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8ee9ba88dfa89%3A0x6131fced4b748be!2sBier+Trunk+Pub+Bar!5e0!3m2!1spt-BR!2sbr!4v1501479888146'
     }
 }];
 
-export const events = [{
-    band: bands[0],
-    venue: venues[1],
-    date: new Date(2017, 7, 6, 21, 30, 0, 0),
-    links: ['https://www.facebook.com/events/1856140748032125/']
-}, {
-    band: bands[3],
-    venue: venues[0],
-    date: new Date(2017, 8, 6, 21, 30, 0, 0),
-    links: ['https://www.facebook.com/events/1856140748032125/']
-}, {
-    band: bands[1],
-    venue: venues[2],
-    date: new Date(2017, 8, 1, 21, 30, 0, 0),
-    links: ['https://www.facebook.com/events/1856140748032125/']
-}].sort((a, b) => a.date.getTime() - b.date.getTime());
+export const eventMonths = (events, type) => [
+    {
+        value: 'all',
+        text: type === 'calendar' ? 'Agenda Completa' : type === 'festivals' ? 'Todos os Festivais' : 'Todos os Lançamentos',
+        count: events.size
+    },
+    ...unique(events.map((event) => moment(event.get('date')).startOf('month').toDate()))
+        .sort((a, b) => a.getTime() - b.getTime())
+        .map(month => {
+            const momentMonth = moment(month);
+            const monthStart = momentMonth.startOf('month').toDate();
+            const monthEnd = momentMonth.endOf('month').toDate();
 
-export const months =
-    [
-        {
-            value: 'all',
-            text: 'Agenda Completa',
-            count: events.length
-        },
-        ...unique(events.map((event) => moment(event.date).startOf('month').toDate()))
-            .sort((a, b) => a.getTime() - b.getTime())
-            .map(month => {
-                const momentMonth = moment(month);
-                const monthStart = momentMonth.startOf('month').toDate();
-                const monthEnd = momentMonth.endOf('month').toDate();
+            return {
+                value: month.toISOString(),
+                text: moment(month).format('MMMM [de] YYYY'),
+                count: events.filter(event => event.date.getTime() >= monthStart.getTime() && event.date.getTime() <= monthEnd.getTime()).length
+            };
+        })
+];
 
-                return {
-                    value: month.toISOString(),
-                    text: moment(month).format('MMMM [de] YYYY'),
-                    count: events.filter(event => event.date.getTime() >= monthStart.getTime() && event.date.getTime() <= monthEnd.getTime()).length
-                };
-            })
-    ];
+export const eventCities = (events) => new List([
+    {
+        value: 'all',
+        text: 'Todas as Cidades',
+        count: events.size
+    },
+    ...unique(events.map((event, i, arr) => ({
+        value: `${event.getIn(['venue', 'location', 'city'])}/${event.getIn(['venue', 'location', 'state'])}`,
+        text: `${event.getIn(['venue', 'location', 'city'])} - ${event.getIn(['venue', 'location', 'state']).toUpperCase()}`,
+        count: arr.filter(c => c.getIn(['venue', 'location', 'city']) === event.getIn(['venue', 'location', 'city']) && c.getIn(['venue', 'location', 'state']) === event.getIn(['venue', 'location', 'state'])).length
+    }))).sort()
+]);
 
-export const filterEvents = (month, city) => {
+// export const eventCities = events => events.map((event, i, arr) => `${event.getIn(['venue', ''])}`);
+
+export const filterEvents = (events, month, city) => {
     let result = events.map(e => e);
 
     if (month !== 'all') {
@@ -151,30 +149,17 @@ export const filterEvents = (month, city) => {
         const monthStart = momentMonth.startOf('month').toDate();
         const monthEnd = momentMonth.endOf('month').toDate();
 
-        result = result.filter(event => event.date.getTime() >= monthStart.getTime() && event.date.getTime() <= monthEnd.getTime());
+        result = result.filter(event => new Date(event.getIn(['date', 'iso'])).getTime() >= monthStart.getTime() && new Date(event.getIn(['date', 'iso'])).getTime() <= monthEnd.getTime());
     }
 
     if (city !== 'all') {
         const [cityName, state] = city.split('/');
 
-        result = result.filter(event => event.venue.location.city === cityName && event.venue.location.state === state);
+        result = result.filter(event => event.get(['venue', 'location', 'city']) === cityName && event.get(['venue', 'location', 'state']) === state);
     }
 
     return result;
 };
-
-export const cities = [
-    {
-        value: 'all',
-        text: 'Todas as Cidades',
-        count: events.length
-    },
-    ...unique(events.map(({ venue: { location: { city, state } } }, i, arr) => ({
-        value: `${city}/${state}`,
-        text: `${city} - ${state.toUpperCase()}`,
-        count: arr.filter(c => c.venue.location.city === city && c.venue.location.state === state).length
-    }))).sort()
-]
 
 export const filterBands = (state) => {
     let result = bands.map(b => b);
@@ -190,140 +175,142 @@ export const filterBands = (state) => {
     return sorted;
 }
 
-const states = [{
-    value: 'AC',
-    text: "Acre",
-    genderArticle: 'o'
-},
-{
-    value: 'AL',
-    text: "Alagoas",
-    genderArticle: 'e'
-},
-{
-    value: 'AM',
-    text: "Amazonas",
-    genderArticle: 'o'
-},
-{
-    value: 'AP',
-    text: "Amapá",
-    genderArticle: 'o'
-},
-{
-    value: 'BA',
-    text: "Bahia",
-    genderArticle: 'a'
-},
-{
-    value: 'CE',
-    text: "Ceará",
-    genderArticle: 'o'
-},
-{
-    value: 'DF',
-    text: "Distrito Federal",
-    genderArticle: 'o'
-},
-{
-    value: 'ES',
-    text: "Espírito Santo",
-    genderArticle: 'o'
-},
-{
-    value: 'GO',
-    text: "Goiás",
-    genderArticle: 'e'
-},
-{
-    value: 'MA',
-    text: "Maranhão",
-    genderArticle: 'o'
-},
-{
-    value: 'MG',
-    text: "Minas Gerais",
-    genderArticle: 'e'
-},
-{
-    value: 'MS',
-    text: "Mato Grosso do Sul",
-    genderArticle: 'o'
-},
-{
-    value: 'MT',
-    text: "Mato Grosso",
-    genderArticle: 'o'
-},
-{
-    value: 'PA',
-    text: "Pará",
-    genderArticle: 'o'
-},
-{
-    value: 'PB',
-    text: "Paraíba",
-    genderArticle: 'a'
-},
-{
-    value: 'PE',
-    text: "Pernambuco",
-    genderArticle: 'e'
-},
-{
-    value: 'PI',
-    text: "Piauí",
-    genderArticle: 'o'
-},
-{
-    value: 'PR',
-    text: "Paraná",
-    genderArticle: 'o'
-},
-{
-    value: 'RJ',
-    text: "Rio de Janeiro",
-    genderArticle: 'o'
-},
-{
-    value: 'RN',
-    text: "Rio Grande do Norte",
-    genderArticle: 'o'
-},
-{
-    value: 'RO',
-    text: "Rondônia",
-    genderArticle: 'e'
-},
-{
-    value: 'RR',
-    text: "Roraima",
-    genderArticle: 'e'
-},
-{
-    value: 'RS',
-    text: "Rio Grande do Sul",
-    genderArticle: 'o'
-},
-{
-    value: 'SC',
-    text: "Santa Catarina",
-    genderArticle: 'e'
-},
-{
-    value: 'SE',
-    text: "Sergipe",
-    genderArticle: 'e'
-},
-{
-    value: 'SP',
-    text: "São Paulo",
-    genderArticle: 'e'
-},
-{
-    value: 'TO',
-    text: "Tocantins",
-    genderArticle: 'o'
-}];
+const states = [
+    {
+        value: 'AC',
+        text: "Acre",
+        genderArticle: 'o'
+    },
+    {
+        value: 'AL',
+        text: "Alagoas",
+        genderArticle: 'e'
+    },
+    {
+        value: 'AM',
+        text: "Amazonas",
+        genderArticle: 'o'
+    },
+    {
+        value: 'AP',
+        text: "Amapá",
+        genderArticle: 'o'
+    },
+    {
+        value: 'BA',
+        text: "Bahia",
+        genderArticle: 'a'
+    },
+    {
+        value: 'CE',
+        text: "Ceará",
+        genderArticle: 'o'
+    },
+    {
+        value: 'DF',
+        text: "Distrito Federal",
+        genderArticle: 'o'
+    },
+    {
+        value: 'ES',
+        text: "Espírito Santo",
+        genderArticle: 'o'
+    },
+    {
+        value: 'GO',
+        text: "Goiás",
+        genderArticle: 'e'
+    },
+    {
+        value: 'MA',
+        text: "Maranhão",
+        genderArticle: 'o'
+    },
+    {
+        value: 'MG',
+        text: "Minas Gerais",
+        genderArticle: 'e'
+    },
+    {
+        value: 'MS',
+        text: "Mato Grosso do Sul",
+        genderArticle: 'o'
+    },
+    {
+        value: 'MT',
+        text: "Mato Grosso",
+        genderArticle: 'o'
+    },
+    {
+        value: 'PA',
+        text: "Pará",
+        genderArticle: 'o'
+    },
+    {
+        value: 'PB',
+        text: "Paraíba",
+        genderArticle: 'a'
+    },
+    {
+        value: 'PE',
+        text: "Pernambuco",
+        genderArticle: 'e'
+    },
+    {
+        value: 'PI',
+        text: "Piauí",
+        genderArticle: 'o'
+    },
+    {
+        value: 'PR',
+        text: "Paraná",
+        genderArticle: 'o'
+    },
+    {
+        value: 'RJ',
+        text: "Rio de Janeiro",
+        genderArticle: 'o'
+    },
+    {
+        value: 'RN',
+        text: "Rio Grande do Norte",
+        genderArticle: 'o'
+    },
+    {
+        value: 'RO',
+        text: "Rondônia",
+        genderArticle: 'e'
+    },
+    {
+        value: 'RR',
+        text: "Roraima",
+        genderArticle: 'e'
+    },
+    {
+        value: 'RS',
+        text: "Rio Grande do Sul",
+        genderArticle: 'o'
+    },
+    {
+        value: 'SC',
+        text: "Santa Catarina",
+        genderArticle: 'e'
+    },
+    {
+        value: 'SE',
+        text: "Sergipe",
+        genderArticle: 'e'
+    },
+    {
+        value: 'SP',
+        text: "São Paulo",
+        genderArticle: 'e'
+    },
+    {
+        value: 'TO',
+        text: "Tocantins",
+        genderArticle: 'o'
+    }
+];
 
 export const stateInfo = (state) => states.find(({ value }) => value === state);

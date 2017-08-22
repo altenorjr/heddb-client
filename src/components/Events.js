@@ -12,12 +12,12 @@ const Events = ({
     showMonth = false,
     fromNow = true
 }) => {
-    if (events.length) {
+    if (events.size) {
         return (
             <div className={classes.events}>
                 {
-                    events.map((event, i) => (
-                        <Event {...{ width, showMonth, fromNow, event, key: i }} />
+                    events.map((data, i) => (
+                        <Event {...{ width, showMonth, fromNow, data, key: i }} />
                     ))
                 }
             </div>

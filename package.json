@@ -1,32 +1,44 @@
 {
   "name": "heddb",
-  "homepage": "http://altenorjr.github.io/heddb",
+  "homepage": "http://hojeediadeblues.com.br/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
+    "create-react-class": "^15.6.0",
+    "immutable": "^3.8.1",
     "material-ui": "^0.18.7",
     "moment": "^2.18.1",
     "normalize.css": "^7.0.0",
+    "parse": "^1.10.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-dropzone": "^4.0.0",
     "react-jss": "^7.0.2",
+    "react-lines-ellipsis": "^0.7.3",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.1.2",
     "react-slick": "^0.14.11",
     "react-social-icons": "^2.7.0",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.7.2",
+    "redux-immutable": "^4.0.0",
+    "redux-thunk": "^2.2.0",
     "remark": "^8.0.0",
     "remark-react": "^4.0.0",
-    "sugar": "^2.0.4"
+    "serialize-error": "^2.1.0",
+    "sugar": "^2.0.4",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "@storybook/react": "^3.1.9",
+    "dot-env": "0.0.1",
     "gh-pages": "^1.0.0",
     "nightmare": "^2.10.0",
     "nodemon": "^1.11.0",
-    "react-scripts": "^1.0.10"
+    "react-scripts": "^1.0.10",
+    "redux-devtools-extension": "^2.13.2",
+    "serve": "^6.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,6 +48,7 @@
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "serve": "serve -s build -p 30500"
   }
 }

@@ -1,10 +1,28 @@
 import React from 'react';
 import Home from './components/Home';
 import Page from './components/Page';
-import { BrazilianBluesConnected } from './components/BrazilianBlues';
-import { CalendarConnected } from './components/Calendar';
+import BrazilianBlues from './components/BrazilianBlues';
+import Calendar from './components/Calendar';
 
-import Login from './components/Login';
+import AdminVenues from './components/AdminVenues'; 
+import AdminBands from './components/AdminBands'; 
+import AdminEvents from './components/AdminEvents'; 
+
+export const adminPaths = [
+    {
+        path: '/admin/bandas',
+        name: 'Bandas',
+        component: AdminBands
+    }, {
+        path: '/admin/casas-de-shows',
+        name: 'Casas de Shows',
+        component: AdminVenues
+    }, {
+        path: '/admin/eventos',
+        name: 'Eventos',
+        component: AdminEvents
+    }
+];
 
 export const websitePaths = [
     {
@@ -14,19 +32,19 @@ export const websitePaths = [
     }, {
         path: '/agenda',
         name: 'Agenda',
-        render: () => (<CalendarConnected type="calendar" />)
+        render: () => (<Calendar type="calendar" />)
     }, {
         path: '/festivais',
         name: 'Festivais',
-        render: () => (<CalendarConnected type="festivals" />)
+        render: () => (<Calendar type="festivals" />)
     }, {
         path: '/lançamentos',
         name: 'Lançamentos',
-        render: () => (<CalendarConnected type="releases" />)
+        render: () => (<Calendar type="releases" />)
     }, {
         path: '/blueseiros-brasileiros',
         name: 'Blueseiros Brasileiros',
-        component: BrazilianBluesConnected
+        component: BrazilianBlues
     }, {
         path: '/artigos',
         name: 'Artigos',
@@ -60,11 +78,3 @@ Donec rhoncus felis quis est ultrices, non egestas urna imperdiet. Sed convallis
 
 Vestibulum accumsan vitae odio sit amet suscipit. Proin id lorem vulputate, faucibus odio auctor, vehicula nisi. Etiam vehicula sagittis convallis. Sed malesuada sapien eget ultricies condimentum. Nunc in odio non justo ultricies lacinia id non urna. Aenean id erat eros. Pellentesque aliquet dictum convallis. Donec egestas rutrum tellus, et tempus ex commodo eget. Phasellus tempor, ex at consequat hendrerit, felis eros pellentesque erat, eget commodo libero ante vitae neque. Pellentesque sit amet tincidunt eros, ut luctus sapien. Maecenas dictum ut orci eu scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi varius sapien eget purus rhoncus, eu malesuada erat suscipit.
 `)
-
-export const adminPaths = [
-    {
-        path: '/',
-        name: 'Login',
-        component: Login
-    }
-].map(({ path, ...rest }) => ({ path: `/admin${path}`, ...rest }));

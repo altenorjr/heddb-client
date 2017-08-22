@@ -1,0 +1,10 @@
+{
+    "script": "serve",
+    "name": "heddb-client",
+    "instances" : 1,
+    "exec_mode" : "cluster",
+    "env": {
+      "PM2_SERVE_PATH": "./build",
+      "PM2_SERVE_PORT": 30500
+    }
+  }

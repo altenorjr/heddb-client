@@ -2,48 +2,69 @@ import React from 'react';
 import jss from 'react-jss';
 import { SocialIcon } from 'react-social-icons';
 import moment from 'moment';
+import { List } from 'immutable';
 
-import { String as SugarString } from 'sugar/string';
+import padLeft from 'sugar/string/padLeft';
 
-const Event = ({ event, classes, width = '100%', showMonth = false, fromNow = true }) => (
-    <div className={classes.eventHolder}>
-        <div className={classes.left}>
-            <div className={classes.date}>
-                {SugarString.padLeft(moment(event.date).format('DD').toString(), 2, '0')}
-                {showMonth && ('/' + SugarString.padLeft(moment(event.date).format('MMM').toLowerCase(), 2, '0'))}
+import EditControls from './EditControls';
+
+const Event = ({
+    data,
+    classes, width = '100%',
+    showMonth = false,
+    fromNow = true,
+    showEditControls = false,
+    requestEdition,
+    requestDeletion
+}) => {
+    return (
+        <div className={classes.eventHolder}>
+            <div className={classes.left}>
+                <div className={classes.date}>
+                    {padLeft(moment(data.getIn(['date', 'iso'], '')).format('DD').toString(), 2, '0')}
+                    {showMonth && ('/' + padLeft(moment(data.getIn(['date', 'iso'], '')).format('MMM').toLowerCase(), 2, '0'))}
+                    {
+                        fromNow && (
+                            <small className={classes.fromNow}>{moment(data.getIn(['date', 'iso'], '')).fromNow()}</small>
+                        )
+                    }
+                </div>
                 {
-                    fromNow && (
-                        <small className={classes.fromNow}>{moment(event.date).fromNow()}</small>
+                    !!((data.get('social') || new List()).size) && (
+                        <div className={classes.social}>
+                            {
+                                data.get('social', new List()).map((link, i) => (
+                                    <SocialIcon key={i} url={link} className={classes.socialIcon} />
+                                ))
+                            }
+                        </div>
                     )
                 }
             </div>
+            <div className={classes.pic} style={{ backgroundImage: `url(${data.getIn(['pic', 'url']) || data.getIn(['band', 'pic', 'url'])})` }} />
+            <div className={classes.details}>
+                <div className={classes.event}>
+                    <h1 className={classes.name}>{data.get('name') || data.getIn(['band', 'name'], '')}</h1>
+                    <div className={classes.time}>{moment(data.getIn(['date', 'iso'], '')).format('HH[h]mm[min]')}</div>
+                </div>
+                <div className={classes.venue}>
+                    <h2 className={classes.venueName}>{data.getIn(['venue', 'name'], '')}</h2>
+                    <div className={classes.address}>{data.getIn(['venue', 'location', 'address'], '')}</div>
+                    <div className={classes.city}>{data.getIn(['venue', 'location', 'city'], '')} - {data.getIn(['venue', 'location', 'state'], '').toUpperCase()}</div>
+                    <div><a className={classes.phone} href={`tel:+55${data.getIn(['venue', 'location', 'phone'], '').replace(/[^0-9]/gi, '')}`}>{data.getIn(['venue', 'location', 'phone'], '')}</a></div>
+                </div>
+            </div>
             {
-                Array.isArray(event.links) && event.links.length && (
-                    <div className={classes.social}>
-                        {
-                            event.links.map((link, i) => (
-                                <SocialIcon key={i} url={link} className={classes.socialIcon} />
-                            ))
-                        }
-                    </div>
+                showEditControls && (
+                    <EditControls
+                        requestEdition={() => requestEdition(data)}
+                        requestDeletion={() => requestDeletion(data)}
+                    />
                 )
             }
         </div>
-        <div className={classes.pic} style={{ backgroundImage: `url(${event.band.pic})` }} />
-        <div className={classes.details}>
-            <div className={classes.event}>
-                <h1 className={classes.name}>{event.name || event.band.name}</h1>
-                <div className={classes.time}>{moment(event.date).format('hh[h]mm[min]')}</div>
-            </div>
-            <div className={classes.venue}>
-                <div className={classes.city}>{event.venue.location.city} - {event.venue.location.state.toUpperCase()}</div>
-                <h2 className={classes.venueName}>{event.venue.name}</h2>
-                <div className={classes.address}>{event.venue.address}</div>
-                <div><a className={classes.phone} href={`tel:+55${event.venue.phone.replace(/[^0-9]/gi, '')}`}>{event.venue.phone}</a></div>
-            </div>
-        </div>
-    </div>
-);
+    );
+}
 
 const styles = {
     eventHolder: {
@@ -124,12 +145,12 @@ const styles = {
     },
     phone: {
         fontSize: '18px',
-        color: 'rgba(0, 0, 0, 0.8)',
+        color: 'rgba(0, 0, 0, 0.6) !important',
         textDecoration: 'none',
-        ':link': { color: 'rgba(0, 0, 0, 0.8)' },
-        ':hover': { color: 'rgba(0, 0, 0, 0.8)' },
-        ':active': { color: 'rgba(0, 0, 0, 0.8)' },
-        ':visited': { color: 'rgba(0, 0, 0, 0.8)' }
+        ':link': { color: 'rgba(0, 0, 0, 0.6) !important' },
+        ':hover': { color: 'rgba(0, 0, 0, 0.6) !important' },
+        ':active': { color: 'rgba(0, 0, 0, 0.6) !important' },
+        ':visited': { color: 'rgba(0, 0, 0, 0.6) !important' }
     },
     social: {
         margin: '10px 0 5px 0'

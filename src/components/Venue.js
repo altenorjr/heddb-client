@@ -5,26 +5,22 @@ import { Map, List } from 'immutable';
 
 import EditControls from './EditControls';
 
-const Band = ({
+const Venue = ({
     classes,
     width = '100%',
     data = new Map(),
-    showState = false,
     showEditControls = false,
-    showStateInformation = false,
     requestEdition,
     requestDeletion
 }) => {
     return (
-        <div className={classes.band}>
+        <div className={classes.venue}>
             <div className={classes.left}>
                 <h1 className={classes.name}>{data.get('name', '')}</h1>
-                {
-                    showStateInformation && (
-                        <h3 className={classes.state}>{data.get('city', '')} - {data.get('state', '')}</h3>
-                    )
-                }
-                <p className={classes.bio}>{data.get('bio', '')}</p>
+                <p>
+                    {data.getIn(['address'])} - {data.getIn(['city'])} - {data.getIn(['state'])}<br />
+                    <small>{data.getIn(['phone'])}</small>
+                </p>
                 <div className={classes.links}>
                     {
                         data.get('social', new List()).map((link, i) => (
@@ -56,7 +52,7 @@ const Band = ({
 };
 
 const styles = {
-    band: {
+    venue: {
         minHeight: '250px',
         width: ({ width = '100%' }) => width,
         margin: '0 0 20px 0',
@@ -101,4 +97,4 @@ const styles = {
     }
 };
 
-export default injectSheet(styles)(Band);
+export default injectSheet(styles)(Venue);

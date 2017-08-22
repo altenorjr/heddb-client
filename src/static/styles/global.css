@@ -19,8 +19,9 @@ a, a:link, a:hover, a:visited {
     text-decoration: none;
 }
 
-h1, .accent-font {
+h1, h2, h3, .accent-font {
     font-family: 'Stint Ultra Condensed' !important;
     /* letter-spacing: 1px; */
     font-weight: 300;
+    margin: 0;
 }
