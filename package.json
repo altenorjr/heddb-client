@@ -31,10 +31,10 @@
     "remark": "^8.0.0",
     "remark-react": "^4.0.0",
     "serialize-error": "^2.1.0",
-    "serve": "^6.0.6",
     "sugar": "^2.0.4",
     "uuid": "^3.1.0",
-    "serve": "^6.0.6"
+    "serve": "^6.0.6",
+    "react-scripts": "^1.0.10"
   },
   "devDependencies": {
     "@storybook/react": "^3.1.9",
@@ -44,7 +44,6 @@
     "gh-pages": "^1.0.0",
     "nightmare": "^2.10.0",
     "nodemon": "^1.11.0",
-    "react-scripts": "^1.0.10",
     "redux-devtools-extension": "^2.13.2"
   },
   "scripts": {
