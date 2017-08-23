@@ -54,8 +54,7 @@
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "serve": "serve -s build -p 5000",
-    "postinstall": "npm run build"
+    "deploy": "git push heroku master",
+    "serve": "serve -s build -p 5000"
   }
 }
