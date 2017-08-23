@@ -1,1 +1,1 @@
-web: serve -s build -p 80
+web: serve -s build
