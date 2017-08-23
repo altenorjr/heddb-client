@@ -27,12 +27,15 @@
     "remark": "^8.0.0",
     "remark-react": "^4.0.0",
     "serialize-error": "^2.1.0",
+    "serve": "^6.0.6",
     "sugar": "^2.0.4",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
     "@storybook/react": "^3.1.9",
     "dot-env": "0.0.1",
+    "dotenv": "^4.0.0",
+    "dotenv-save": "^1.2.0",
     "gh-pages": "^1.0.0",
     "nightmare": "^2.10.0",
     "nodemon": "^1.11.0",
@@ -49,6 +52,7 @@
     "build-storybook": "build-storybook -s public",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "serve": "serve -s build -p 30500"
+    "serve": "serve -s build -p 30500",
+    "postinstall": "react-scripts build"
   }
 }

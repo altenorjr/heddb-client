@@ -1,4 +1,3 @@
-import 'dot-env';
 import Parse from 'parse';
 
 import moment from 'moment';
@@ -12,5 +11,6 @@ moment.locale('pt-br');
 
 injectTapEventPlugin();
 
-Parse.initialize("HojeEDiaDeBlues");
-Parse.serverURL = 'http://localhost:1337/parse';
+Parse.initialize(process.env.REACT_APP_PARSE_SERVER_APPLICATION_ID);
+Parse.serverURL = process.env.REACT_APP_PARSE_SERVER_URL; 
+console.log(Parse.serverURL);
