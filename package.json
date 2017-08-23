@@ -57,6 +57,6 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "serve": "serve -s build -p 5000",
-    "postinstall": "react-scripts build"
+    "postinstall": "npm run build"
   }
 }
