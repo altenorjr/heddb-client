@@ -3,6 +3,10 @@
   "homepage": "http://hojeediadeblues.com.br/",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "7.10.0",
+    "npm": "4.2.0"
+  },
   "dependencies": {
     "classnames": "^2.2.5",
     "create-react-class": "^15.6.0",
