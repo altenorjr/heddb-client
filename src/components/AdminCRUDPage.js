@@ -9,7 +9,6 @@ import AdminPageWithTopBar from './AdminPageWithTopBar';
 class AdminCRUDPageUgly extends PureComponent {
     static propTypes = {
         title: PropTypes.string,
-        data: PropTypes.array,
         onRequestAdd: PropTypes.func.isRequired,
         onCloseEditor: PropTypes.func.isRequired,
         editor: PropTypes.node.isRequired,
@@ -24,12 +23,19 @@ class AdminCRUDPageUgly extends PureComponent {
     closeEditor = () => this.props.onCloseEditor()
 
     render = () => {
-        const { title, editor, className, contentClassName, editorWidth, classes } = this.props;
+        const {
+            title,
+            editor,
+            className,
+            contentClassName,
+            editorWidth,
+            classes
+        } = this.props;
 
         return (
-            <AdminPageWithTopBar 
-                title={title} 
-                className={className} 
+            <AdminPageWithTopBar
+                title={title}
+                className={className}
                 onRightIconClick={() => this.props.onRequestAdd()}
             >
                 <Drawer
@@ -41,6 +47,7 @@ class AdminCRUDPageUgly extends PureComponent {
                 >
                     {editor}
                 </Drawer>
+
                 <div className={cx(classes.body, contentClassName)}>
                     {this.props.children}
                 </div>

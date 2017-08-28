@@ -2,6 +2,8 @@ import { combineReducers } from 'redux-immutable'
 import { calculate, UPDATE_DIMENSIONS } from './dimensions';
 
 export const SET_CURRENT_PATH = '@client/navigation/SET_CURRENT_PATH';
+export const TOGGLE_DRAWER_OPENED = '@client/navigation/TOGGLE_DRAWER_OPENED';
+export const TOGGLE_DRAWER_DOCKED = '@client/navigation/TOGGLE_DRAWER_DOCKED';
 
 export const setCurrentPath = () => (dispatch) => dispatch({ type: SET_CURRENT_PATH });
 

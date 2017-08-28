@@ -10,8 +10,8 @@ import AdminEvents from './components/AdminEvents';
 
 export const adminPaths = [
     {
-        path: '/admin/bandas',
-        name: 'Bandas',
+        path: '/admin/blueseiros',
+        name: 'Blueseiros',
         component: AdminBands
     }, {
         path: '/admin/casas-de-shows',

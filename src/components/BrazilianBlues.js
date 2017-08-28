@@ -4,14 +4,19 @@ import PropTypes from 'prop-types';
 import jss from 'react-jss';
 import { List } from 'immutable';
 
-import DropDown from './DropDown';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
+
 import Bands from './Bands';
 import FilteredContainer from './FilteredContainer';
+import { createBoundFilter } from './GenericFilter';
+
 
 import {
     selectState,
     filterRecords
 } from '../redux/Bands';
+
+const StatesFilter = createBoundFilter('Bands', 'states', 'selectedState', 'selectState');
 
 class UglyBrazilianBlues extends PureComponent {
     static propTypes = {
@@ -19,7 +24,8 @@ class UglyBrazilianBlues extends PureComponent {
         bands: PropTypes.instanceOf(List),
         selectedState: PropTypes.string.isRequired,
         selectState: PropTypes.func.isRequired,
-        filterRecords: PropTypes.func.isRequired
+        filterRecords: PropTypes.func.isRequired,
+        loading: PropTypes.bool.isRequired
     }
 
     static defaultProps = {
@@ -35,22 +41,23 @@ class UglyBrazilianBlues extends PureComponent {
 
     render = () => {
         const {
-            states,
             selectedState,
-            selectState,
             bands,
+            loading,
             classes
         } = this.props;
+
+        if (loading) {
+            return (
+                <RefreshIndicator top={250} left={(window.innerWidth / 2) - 20} status="loading" style={{zIndex: 99999}} />
+            );
+        }
 
         return (
             <FilteredContainer
                 autoPadding={selectedState !== 'all'}
                 filters={[
-                    <DropDown
-                        items={states}
-                        selectedValue={selectedState}
-                        onSelectedValueChanged={(state) => selectState(state)}
-                    />
+                    <StatesFilter />
                 ]}>
                 {
                     selectedState !== 'all' && (
@@ -65,7 +72,7 @@ class UglyBrazilianBlues extends PureComponent {
                 {
                     selectedState === 'all' && (
                         this.groupedBands().map(({ title, bands }, i) => (
-                            <div key={i}>
+                            <div key={i} className={classes.bands}>
                                 <h1 className={classes.title}>{title}</h1>
                                 <Bands
                                     title={title}
@@ -114,7 +121,8 @@ const BrazilianBlues = jss(styles)(UglyBrazilianBlues);
 const mapStateToProps = (state) => ({
     states: state.getIn(['bands', 'states'], new List()),
     bands: state.getIn(['bands', 'data'], new List()),
-    selectedState: state.getIn(['bands', 'selectedState'], null)
+    selectedState: state.getIn(['bands', 'selectedState'], null),
+    loading: state.getIn(['bands', 'loading'])
 });
 
 const mapDispatchToProps = {

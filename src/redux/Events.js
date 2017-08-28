@@ -6,6 +6,7 @@ const { conditionalUpload, setFields, setRefs } = require('../parse/util');
 
 const SET_FILTER_CITY = `@client/events/SET_FILTER_CITY`;
 const SET_FILTER_MONTH = `@client/events/SET_FILTER_MONTH`;
+const SET_FILTER_TYPE = `@client/events/SET_FILTER_TYPE`;
 
 const convert = (object, state) => {
     const data = state.data.toJS();
@@ -20,8 +21,9 @@ const convert = (object, state) => {
                 object.set('pic', null);
             }
 
-            object.set('city', data.venue.location.city);
-            object.set('state', data.venue.location.state);
+            object.set('release', !!data.release);
+            object.set('city', data.venue.city);
+            object.set('state', data.venue.state);
 
             return object;
         });
@@ -45,6 +47,15 @@ const selectedMonth = (state = moment().startOf('month').toISOString(), { type, 
     }
 };
 
+const selectedType = (state = 'all', { type, selectedType }) => {
+    switch (type) {
+        case SET_FILTER_TYPE:
+            return selectedType;
+        default:
+            return state;
+    }
+};
+
 const cities = (state = new List(), { type, metadata }) => {
     switch (type) {
         case result.GET_RECORDS_SUCCESS:
@@ -63,25 +74,43 @@ const months = (state = new List(), { type, metadata }) => {
     }
 };
 
+const types = (state = new List(), { type, metadata }) => {
+    switch (type) {
+        case result.GET_RECORDS_SUCCESS:
+            return fromJS(metadata.types) || state;
+        default:
+            return state;
+    }
+};
+
 const selectCity = (selectedCity) => (dispatch, getState) => {
     dispatch({ type: SET_FILTER_CITY, selectedCity });
 
-    filterRecords({ city: selectedCity })(dispatch, getState);
+    filterEvents({ city: selectedCity })(dispatch, getState);
 };
 
 const selectMonth = (selectedMonth) => (dispatch, getState) => {
     dispatch({ type: SET_FILTER_MONTH, selectedMonth });
 
-    filterRecords({ month: selectedMonth })(dispatch, getState);
+    filterEvents({ month: selectedMonth })(dispatch, getState);
 };
 
-const filterRecords = ({ city, month, loadMetadata }) => (dispatch, getState) => {
+const selectType = (selectedType) => (dispatch, getState) => {
+    dispatch({ type: SET_FILTER_TYPE, selectedType });
+
+    filterEvents({ type: selectedType })(dispatch, getState);
+};
+
+const filterEvents = (filters = {}) => (dispatch, getState) => {
+    const { city, month, loadMetadata, type } = filters;
+
     dispatch({ type: result.GET_RECORDS_START });
 
     const state = getState();
 
     const selectedCity = city || state.getIn(['events', 'selectedCity']) || 'all';
     const selectedMonth = month || state.getIn(['events', 'selectedMonth']) || moment().startOf('month').toISOString();
+    const selectedType = type || state.getIn(['events', 'selectedType']) || 'all';
 
     const hasCities = !!state.getIn(['events', 'cities']).size;
     const hasMonths = !!state.getIn(['events', 'months']).size;
@@ -91,9 +120,10 @@ const filterRecords = ({ city, month, loadMetadata }) => (dispatch, getState) =>
     return Parse.Cloud.run('filterEvents', {
         selectedMonth,
         selectedCity,
+        selectedType,
         shouldLoadMetadata
     })
-        .then(({ cities, events, months }) => {
+        .then(({ cities, events, months, types }) => {
             const action = {
                 type: result.GET_RECORDS_SUCCESS,
                 data: fromJS(events.map(event => event.toJSON())),
@@ -103,9 +133,12 @@ const filterRecords = ({ city, month, loadMetadata }) => (dispatch, getState) =>
             if (shouldLoadMetadata) {
                 action.metadata.cities = cities;
                 action.metadata.months = months;
+                action.metadata.types = types;
             }
 
             dispatch(action);
+
+            return { cities, events, months, types };
         })
         .catch(console.warn);
 };
@@ -115,15 +148,19 @@ const result = GenericCrudReducer('Events', {
     reducers: {
         selectedCity,
         selectedMonth,
+        selectedType,
         cities,
-        months
+        months,
+        types
     },
     actions: {
         SET_FILTER_CITY,
         SET_FILTER_MONTH,
+        SET_FILTER_TYPE,
         selectCity,
         selectMonth,
-        filterRecords
+        selectType,
+        filterEvents
     }
 });
 

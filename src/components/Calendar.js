@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { List } from 'immutable';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
@@ -8,10 +9,11 @@ import Events from './Events';
 import DropDown from './DropDown';
 import FilteredContainer from './FilteredContainer';
 
-import { filterRecords, selectMonth, selectCity } from '../redux/Events';
+import { filterEvents, selectMonth, selectCity, selectType } from '../redux/Events';
 
 class Calendar extends Component {
     static propTypes = {
+        type: PropTypes.string.isRequired,
         months: PropTypes.instanceOf(List),
         cities: PropTypes.instanceOf(List),
         selectedMonth: PropTypes.string.isRequired,
@@ -19,7 +21,8 @@ class Calendar extends Component {
         events: PropTypes.instanceOf(List),
         selectCity: PropTypes.func.isRequired,
         selectMonth: PropTypes.func.isRequired,
-        filterRecords: PropTypes.func.isRequired
+        filterEvents: PropTypes.func.isRequired,
+        selectType: PropTypes.func.isRequired
     }
 
     selectedMonthChanged = (value) => this.props.selectMonth(value);
@@ -28,7 +31,31 @@ class Calendar extends Component {
 
     createFilter = (props) => <DropDown {...props} />
 
-    componentDidMount = () => this.props.filterRecords({ month: this.props.selectedMonth, city: this.props.selectedCity });
+    componentDidMount = () => {
+        this.props.selectType(this.props.type);
+        this.props.filterEvents({
+            month: this.props.selectedMonth,
+            city: this.props.selectedCity,
+            type: this.props.type
+        }).then(({ months }) => {
+            const currentMonth = this.props.selectedMonth;
+
+            if (months.map(m => m.value).indexOf(currentMonth) !== -1) {
+                return;
+            }
+
+            const nextMonth = months.slice(1).reduce((next, month) =>
+                next ?
+                    next :
+                    moment(month.value).isAfter(currentMonth) ?
+                        month.value :
+                        null,
+                null
+            ) || 'all';
+
+            this.props.selectMonth(nextMonth);
+        });
+    }
 
     render = () => {
         const {
@@ -83,7 +110,12 @@ const mapStateToProps = (state) => ({
     loading: state.getIn(['events', 'loading'], true)
 });
 
-const mapDispatchToProps = { filterRecords, selectCity, selectMonth };
+const mapDispatchToProps = {
+    filterEvents,
+    selectCity,
+    selectMonth,
+    selectType
+};
 
 const mergeProps = (s, d, o) => ({ ...s, ...d, ...o })
 

@@ -35,6 +35,12 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
         loaded: false
     }
 
+    types = [
+        { value: 'calendar', text: 'Evento' },
+        { value: 'release', text: 'Lançamento' },
+        { value: 'festival', text: 'Festival' }
+    ]
+
     loadState = (props) => {
         if (props.bands.length && props.venues.length) {
             return this.setState({ loaded: true });
@@ -55,12 +61,14 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
 
     updateStateValue = (path, value) => {
         this.setState(({ data }) => {
+            const oldBandName = data.getIn(['band', 'name']);
+
             let newData = data.setIn(path, value);
 
             const band = newData.get('band');
             const name = newData.get('name');
 
-            if (band && !name) {
+            if (band && (!name || name === oldBandName)) {
                 newData = newData.set('name', band.get('name'));
             }
 
@@ -111,6 +119,19 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
 
         return (
             <div className={classes.form}>
+                <SelectField
+                    floatingLabelText="Tipo"
+                    value={data.get('type', 'calendar')}
+                    onChange={(e, i, type) => console.log({ e, i, type }) || this.updateStateValue(['type'], this.types[i].value)}
+                    floatingLabelFixed
+                    fullWidth
+                >
+                    {
+                        this.types.map((type, i) => (
+                            <MenuItem key={i} value={type.value} primaryText={type.text} />
+                        ))
+                    }
+                </SelectField>
                 <div className={classes.section}>
                     <div className={classes.sectionItem}>
                         <SelectField

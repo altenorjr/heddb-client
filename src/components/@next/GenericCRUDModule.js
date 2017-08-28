@@ -1,7 +1,7 @@
 const { connect } = require('react-redux');
 const CRUDPureComponent = require('./CRUDPureComponent').default;
 
-module.exports = (name, statePath, redux, Container, ListItem, Editor, config = { loadFunction: 'loadRecords', loadParams: {} }) => {
+module.exports = (name, statePath, redux, Container, ListItem, Editor, Filters, config = { loadFunction: 'loadRecords', loadParams: {} }) => {
     const {
         saveRecord,
         deleteRecord,
@@ -9,7 +9,7 @@ module.exports = (name, statePath, redux, Container, ListItem, Editor, config = 
         requestDeletion
     } = redux;
 
-    const Class = CRUDPureComponent(name, Container.default, ListItem.default, Editor.default, config.loadFunction, config.loadParams)
+    const Class = CRUDPureComponent(name, Container.default, ListItem.default, Editor.default, Filters, config.loadFunction, config.loadParams)
 
     const mapStateToProps = (state) => ({
         data: state.getIn([statePath, 'data']),
