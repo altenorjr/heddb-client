@@ -8,7 +8,7 @@ import UploadIcon from 'material-ui/svg-icons/file/file-upload';
 import ClearIcon from 'material-ui/svg-icons/action/delete';
 
 
-class ImageEditorUgly extends PureComponent {
+class ImageEditor extends PureComponent {
     static propTypes = {
         title: PropTypes.string.isRequired,
         image: PropTypes.string.isRequired,
@@ -111,7 +111,7 @@ class ImageEditorUgly extends PureComponent {
     }
 }
 
-const ImageEditor = jss({
+export default jss({
     imageHolder: {
         marginTop: '14px',
         position: 'relative'
@@ -168,6 +168,4 @@ const ImageEditor = jss({
         width: '75px !important',
         height: '75px !important'
     }
-})(ImageEditorUgly);
-
-export default ImageEditor;
+})(ImageEditor);

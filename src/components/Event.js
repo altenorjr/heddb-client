@@ -53,7 +53,7 @@ const Event = ({
                 <div className={classes.event}>
                     {
                         showEventType && (
-                            <strong className={classes.type}>Tipo: {getName(data.get('type'))}</strong>
+                            <strong className={classes.type}>{getName(data.get('type'))}</strong>
                         )
                     }
                     <h1 className={classes.name}>{data.get('name') || data.getIn(['band', 'name'], '')}</h1>
@@ -61,9 +61,9 @@ const Event = ({
                 </div>
                 <div className={classes.venue}>
                     <h2 className={classes.venueName}>{data.getIn(['venue', 'name'], '')}</h2>
-                    <div className={classes.address}>{data.getIn(['venue', 'location', 'address'], '')}</div>
-                    <div className={classes.city}>{data.getIn(['venue', 'location', 'city'], '')} - {data.getIn(['venue', 'location', 'state'], '').toUpperCase()}</div>
-                    <div><a className={classes.phone} href={`tel:+55${data.getIn(['venue', 'location', 'phone'], '').replace(/[^0-9]/gi, '')}`}>{data.getIn(['venue', 'location', 'phone'], '')}</a></div>
+                    <div className={classes.address}>{data.getIn(['venue', 'address'], '')}</div>
+                    <div className={classes.city}>{data.getIn(['venue', 'city'], '')} - {data.getIn(['venue', 'state'], '').toUpperCase()}</div>
+                    <div><a className={classes.phone} href={`tel:+55${data.getIn(['venue', 'phone'], '').replace(/[^0-9]/gi, '')}`}>{data.getIn(['venue', 'phone'], '')}</a></div>
                 </div>
             </div>
             {

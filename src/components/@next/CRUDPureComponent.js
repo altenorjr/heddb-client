@@ -8,7 +8,7 @@ import RefreshIndicator from 'material-ui/RefreshIndicator';
 import FilterPanel from '../FilterPanel';
 import Confirm from './Confirm';
 
-export default (name, Container, ListItem, Editor, Filters, loadFunction, loadParams) => {
+export default (name, Container, ListItem, Editor, Filters, loadFunction, loadParams, afterLoad) => {
     class CRUDPureComponent extends PureComponent {
         static propTypes = {
             data: PropTypes.instanceOf(List),
@@ -22,7 +22,11 @@ export default (name, Container, ListItem, Editor, Filters, loadFunction, loadPa
         }
 
         componentDidMount = () => {
-            this.props[loadFunction](loadParams);
+            this.props[loadFunction](loadParams).then(result => {
+                if (typeof afterLoad === 'function') {
+                    afterLoad.call(this, result);
+                }
+            });
         }
 
         requestEdition = (item) => this.props.requestEdition(item);

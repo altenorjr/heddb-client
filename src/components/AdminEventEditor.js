@@ -84,7 +84,7 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
         const { data } = this.state;
 
         const objectId = data.get('objectId', null);
-        const type = data.get('type', null);
+        const type = data.get('type', 'calendar');
         const newPic = data.get('newPic', null);
         const pic = data.getIn(['pic', 'url'], null);
         const date = data.getIn(['date', 'iso'], null);
@@ -164,7 +164,11 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
                 >
                     {
                         this.types.map((type, i) => (
-                            <MenuItem key={i} value={type.value} primaryText={type.text} />
+                            <MenuItem
+                                key={i}
+                                value={type.value}
+                                primaryText={type.text}
+                            />
                         ))
                     }
                 </SelectField>
@@ -183,6 +187,7 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
                                         key={band.objectId}
                                         value={band.objectId}
                                         primaryText={band.name}
+                                        secondaryText={<small>{band.city} - {band.state}</small>}
                                     />
                                 ))
                             }
@@ -212,6 +217,7 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
                                 key={venue.objectId}
                                 value={venue.objectId}
                                 primaryText={venue.name}
+                                secondaryText={<small>{venue.city} - {venue.state}</small>}
                             />
                         ))
                     }
@@ -257,7 +263,7 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
                 />
                 <ImageEditor
                     title={`Foto ${data.get('type') === 'festival' ? '*' : ''}`}
-                    image={data.get('newPic', false) || data.getIn(['pic', 'url'], false) || (data.get('type') !== 'festival' ? this.getSingleBandInfo(['pic', 'url']) : '')}
+                    image={data.get('newPic', false) || data.getIn(['pic', 'url'], false) || (data.get('type') !== 'festival' ? this.getSingleBandInfo(['pic', 'url'], '') : '')}
                     onChange={(newPic) => this.pictureUpdated(newPic)}
                     shouldShowRemoveButton={(newImage) => !!newImage || (!!data.getIn(['pic', 'url']) && data.get('type') !== 'festival')}
                 />
@@ -306,7 +312,7 @@ const mapDispatchToProps = {
     filterVenues
 }
 
-const mergeProps = (s, d, o) => Object.assign({}, o, s, d);
+const mergeProps = (s, d, o) => ({ ...o, ...s, ...d });
 
 const AdminEventEditorConnected = connect(mapStateToProps, mapDispatchToProps, mergeProps)(AdminEventEditor);
 

@@ -12,7 +12,7 @@ const convert = (object, state) => {
     const data = state.data.toJS();
 
     return conditionalUpload(data.newPic, object, 'pic')
-        .then(object => setFields(object, data, ['name', 'social', 'type']))
+        .then(object => setFields(object, data, ['name', 'social']))
         .then(object => setRefs(object, data, { venue: 'Venues' }))
         .then(object => {
             object.set('date', new Date(data.date.iso));
@@ -20,6 +20,8 @@ const convert = (object, state) => {
             const Bands = new Parse.Object.extend('Bands');
 
             object.set('bands', data.bands.map(({ objectId }) => Bands.createWithoutData(objectId)));
+
+            object.set('type', data.type || 'calendar');
 
             if (!data.newPic && !(data.pic || {}).url) {
                 object.set('pic', null);
