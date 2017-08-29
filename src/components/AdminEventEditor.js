@@ -10,21 +10,23 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 import SocialLinksEditor from './@next/SocialLinksEditor';
+import MultipleBandsEditor from './MultipleBandsEditor';
+
 import ImageEditor from './@next/ImageEditor';
 import CRUDEditorPureComponent from './@next/CRUDEditorPureComponent';
 
 import AdminCrudEditor from './AdminCRUDEditor';
 
-import { filterRecords as loadBands } from '../redux/Bands';
-import { loadRecords as loadVenues } from '../redux/Venues';
+import { filterBands } from '../redux/Bands';
+import { filterVenues } from '../redux/Venues';
 
 class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEditor) {
     static propTypes = {
         data: PropTypes.instanceOf(Map),
         onSave: PropTypes.func.isRequired,
         onClose: PropTypes.func.isRequired,
-        loadVenues: PropTypes.func.isRequired,
-        loadBands: PropTypes.func.isRequired,
+        filterVenues: PropTypes.func.isRequired,
+        filterBands: PropTypes.func.isRequired,
         bands: PropTypes.array,
         venues: PropTypes.array
     }
@@ -36,7 +38,7 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
     }
 
     types = [
-        { value: 'calendar', text: 'Evento' },
+        { value: 'calendar', text: 'Agenda' },
         { value: 'release', text: 'Lançamento' },
         { value: 'festival', text: 'Festival' }
     ]
@@ -51,24 +53,25 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
         this.loadState(this.props);
 
         if (!this.props.bands.length) {
-            this.props.loadBands({}).then(() => this.loadState());
+            this.props.filterBands({}).then(() => this.loadState());
         }
 
         if (!this.props.venues.length) {
-            this.props.loadVenues().then(() => this.loadState());
+            this.props.filterVenues().then(() => this.loadState());
         }
     }
 
     updateStateValue = (path, value) => {
         this.setState(({ data }) => {
-            const oldBandName = data.getIn(['band', 'name']);
+            const oldBandName = this.getSingleBandInfo(['name'], '', data);
 
             let newData = data.setIn(path, value);
 
-            const band = newData.get('band');
+            const type = newData.get('type');
+            const band = this.getSingleBand(newData);
             const name = newData.get('name');
 
-            if (band && (!name || name === oldBandName)) {
+            if (band && (!name || name === oldBandName) && type !== 'festival') {
                 newData = newData.set('name', band.get('name'));
             }
 
@@ -76,11 +79,16 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
         });
     }
 
+
     validate = () => {
         const { data } = this.state;
 
+        const objectId = data.get('objectId', null);
+        const type = data.get('type', null);
+        const newPic = data.get('newPic', null);
+        const pic = data.getIn(['pic', 'url'], null);
         const date = data.getIn(['date', 'iso'], null);
-        const band = data.get('band', null);
+        const bands = data.get('bands', new List());
         const venue = data.get('venue', null);
 
         let valid = true;
@@ -89,7 +97,27 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
             valid = false;
         }
 
-        if (band === null || venue === null) {
+        if (venue === null) {
+            valid = false;
+        }
+
+        if (['calendar', 'festival', 'event'].indexOf(type) === -1) {
+            valid = false;
+        }
+
+        if (type !== 'festival' && bands.size !== 1) {
+            valid = false;
+        }
+
+        if (type === 'festival' && bands.size < 2) {
+            valid = false;
+        }
+
+        if (!objectId && type === 'festival' && !newPic) {
+            valid = false;
+        }
+
+        if (objectId && !newPic && !pic && type === 'festival') {
             valid = false;
         }
 
@@ -103,6 +131,14 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
 
         this.updateStateValue(['newPic'], newPic)
     }
+
+    getSingleBandId = (data = this.state.data) => data.getIn(['bands', 0, 'objectId'], null);
+
+    getSingleBand = (data = this.state.data) => fromJS(this.props.bands.find(b => b.objectId === this.getSingleBandId(data)) || {});
+
+    getSingleBandInfo = (path, defaultValue, data = this.state.data) => this.getSingleBand(data).getIn(path, defaultValue);
+
+    getBandById = (id) => this.props.bands.find(b => b.objectId === id);
 
     renderContent = () => {
         const {
@@ -122,7 +158,7 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
                 <SelectField
                     floatingLabelText="Tipo"
                     value={data.get('type', 'calendar')}
-                    onChange={(e, i, type) => console.log({ e, i, type }) || this.updateStateValue(['type'], this.types[i].value)}
+                    onChange={(e, i, type) => this.updateStateValue(['type'], this.types[i].value)}
                     floatingLabelFixed
                     fullWidth
                 >
@@ -132,38 +168,54 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
                         ))
                     }
                 </SelectField>
-                <div className={classes.section}>
-                    <div className={classes.sectionItem}>
+                {
+                    data.get('type') !== 'festival' && (
                         <SelectField
                             floatingLabelText="Banda"
-                            value={data.getIn(['band', 'objectId'], '')}
-                            onChange={(e, i, id) => this.updateStateValue(['band'], fromJS(bands[i]))}
+                            value={this.getSingleBandId()}
+                            onChange={(e, i, id) => this.updateStateValue(['bands'], fromJS([this.getBandById(id)]))}
                             floatingLabelFixed
                             fullWidth
                         >
                             {
                                 bands.map(band => (
-                                    <MenuItem key={band.objectId} value={band.objectId} primaryText={band.name} />
+                                    <MenuItem
+                                        key={band.objectId}
+                                        value={band.objectId}
+                                        primaryText={band.name}
+                                    />
                                 ))
                             }
                         </SelectField>
-                    </div>
-                    <div className={classes.sectionItem}>
-                        <SelectField
-                            floatingLabelText="Local"
-                            value={data.getIn(['venue', 'objectId'], '')}
-                            onChange={(e, i, id) => this.updateStateValue(['venue'], fromJS(venues[i]))}
-                            floatingLabelFixed
-                            fullWidth
-                        >
-                            {
-                                venues.map(venue => (
-                                    <MenuItem key={venue.objectId} value={venue.objectId} primaryText={venue.name} />
-                                ))
-                            }
-                        </SelectField>
-                    </div>
-                </div>
+                    )
+                }
+                {
+                    data.get('type') === 'festival' && (
+                        <MultipleBandsEditor
+                            title="Bandas *"
+                            bands={data.get('bands') || new List()}
+                            availableBands={bands}
+                            onChange={(selectedBands) => this.updateStateValue(['bands'], selectedBands)}
+                        />
+                    )
+                }
+                <SelectField
+                    floatingLabelText="Local"
+                    value={data.getIn(['venue', 'objectId'], '')}
+                    onChange={(e, i, id) => this.updateStateValue(['venue'], fromJS(venues[i]))}
+                    floatingLabelFixed
+                    fullWidth
+                >
+                    {
+                        venues.map(venue => (
+                            <MenuItem
+                                key={venue.objectId}
+                                value={venue.objectId}
+                                primaryText={venue.name}
+                            />
+                        ))
+                    }
+                </SelectField>
                 <div className={classes.section}>
                     <div className={classes.sectionItem}>
                         <DatePicker
@@ -199,15 +251,15 @@ class AdminEventEditorUgly extends CRUDEditorPureComponent('Evento', AdminCrudEd
                     fullWidth
                 />
                 <SocialLinksEditor
-                    title="Redes Sociais *"
+                    title="Redes Sociais"
                     links={data.get('social') || new List()}
                     onChange={(links) => this.updateStateValue(['social'], links)}
                 />
                 <ImageEditor
-                    title="Foto *"
-                    image={data.get('newPic') || data.getIn(['pic', 'url']) || data.getIn(['band', 'pic', 'url']) || ''}
+                    title={`Foto ${data.get('type') === 'festival' ? '*' : ''}`}
+                    image={data.get('newPic', false) || data.getIn(['pic', 'url'], false) || (data.get('type') !== 'festival' ? this.getSingleBandInfo(['pic', 'url']) : '')}
                     onChange={(newPic) => this.pictureUpdated(newPic)}
-                    shouldShowRemoveButton={(newImage) => !!newImage || !!data.getIn(['pic', 'url'])}
+                    shouldShowRemoveButton={(newImage) => !!newImage || (!!data.getIn(['pic', 'url']) && data.get('type') !== 'festival')}
                 />
             </div>
         );
@@ -250,8 +302,8 @@ const mapStateToProps = (props) => ({
 });
 
 const mapDispatchToProps = {
-    loadBands,
-    loadVenues
+    filterBands,
+    filterVenues
 }
 
 const mergeProps = (s, d, o) => Object.assign({}, o, s, d);

@@ -18,6 +18,7 @@ module.exports = GenericCRUDModule(
     AdminVenueEditor,
     [<State />],
     {
-        loadFunction: 'filterVenues'
+        loadFunction: 'filterVenues',
+        loadParams: { shouldLoadMetadata: true }
     }
 );

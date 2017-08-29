@@ -5,90 +5,58 @@ import { List } from 'immutable'
 
 import TextField from 'material-ui/TextField';
 import { SocialIcon } from 'react-social-icons';
-import IconButton from 'material-ui/IconButton';
-import AddIcon from 'material-ui/svg-icons/content/add-circle';
-import RemoveIcon from 'material-ui/svg-icons/content/remove-circle';
 
-class SocialLinksEditorUgly extends PureComponent {
+import MultipleItemsEditor from './MultipleItemsEditor';
+
+class SocialLinksEditor extends PureComponent {
     static propTypes = {
         title: PropTypes.string.isRequired,
         links: PropTypes.instanceOf(List).isRequired,
         onChange: PropTypes.func.isRequired
     }
 
-    addSocialIcon = () => {
-        const newValue = this.props.links.push('https://');
+    updateSocialLink = (i, value) => {
+        const newValue = this.props.links.set(i, value);
 
         this.props.onChange(newValue);
     }
 
-    updateSocialLink = (updatedIndex, value) => {
-        const newValue = this.props.links.set(updatedIndex, value);
-
-        this.props.onChange(newValue);
-    }
-
-    removeSocialLink = (deletedIndex) => {
-        const newValue = this.props.links.delete(deletedIndex);
-
-        this.props.onChange(newValue);
-    }
+    itemTemplate = (item, i) => (
+        <div className={this.props.classes.socialLink}>
+            <TextField
+                name={`social-links-${i}`}
+                value={item}
+                onChange={(e) => this.updateSocialLink(i, e.target.value)}
+                fullWidth
+            />
+            <SocialIcon className={this.props.classes.socialIcon} url={item}></SocialIcon>
+        </div>
+    );
 
     render = () => {
         const {
             title,
-            classes,
             links = new List()
         } = this.props;
 
         return (
-            <div className={classes.social}>
-                <div className={classes.label}>
-                    <div>{title}</div>
-                    <IconButton onTouchTap={this.addSocialIcon}><AddIcon /></IconButton>
-                </div>
-                    {
-                        links.map((link, i) => (
-                            <div
-                                key={i}
-                                className={classes.socialLink}
-                            >
-                                <TextField
-                                    name={`social-links-${i}`}
-                                    value={link}
-                                    onChange={(e) => this.updateSocialLink(i, e.target.value)}
-                                    fullWidth
-                                />
-                                <SocialIcon className={classes.socialIcon} url={link}></SocialIcon>
-                                <IconButton onTouchTap={() => this.removeSocialLink(i)}><RemoveIcon /></IconButton>
-                            </div>
-                        ))
-                    }
-            </div>
+            <MultipleItemsEditor
+                title={title}
+                items={links}
+                itemTemplate={(item, i) => this.itemTemplate(item, i)}
+                newItemTemplate="https://"
+                onChange={(newValue) => this.props.onChange(newValue)}
+            />
         )
     }
 }
 
-const SocialLinksEditor = jss({
-    social: {
-        display: 'flex',
-        flexDirection: 'column',
-        // alignItems: 'flex-end',
-        marginTop: '14px'
-    },
-    label: {
-        color: 'rgba(0, 0, 0, 0.3)',
-        fontSize: '12px',
-        marginBottom: '5px',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
+export default jss({
     socialLink: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1
     },
     socialIcon: {
         width: '15px !important',
@@ -98,6 +66,4 @@ const SocialLinksEditor = jss({
         margin: '10px',
         justifyContent: 'center'
     }
-})(SocialLinksEditorUgly);
-
-export default SocialLinksEditor;
+})(SocialLinksEditor);

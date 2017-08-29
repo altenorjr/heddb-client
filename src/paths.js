@@ -36,11 +36,11 @@ export const websitePaths = [
     }, {
         path: '/festivais',
         name: 'Festivais',
-        render: () => (<Calendar type="festivals" />)
+        render: () => (<Calendar type="festival" />)
     }, {
         path: '/lançamentos',
         name: 'Lançamentos',
-        render: () => (<Calendar type="releases" />)
+        render: () => (<Calendar type="release" />)
     }, {
         path: '/blueseiros-brasileiros',
         name: 'Blueseiros Brasileiros',

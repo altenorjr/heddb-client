@@ -8,11 +8,18 @@ import padLeft from 'sugar/string/padLeft';
 
 import EditControls from './EditControls';
 
+const getName = (type) => ({
+    calendar: 'Agenda',
+    release: 'Lançamento',
+    festival: 'Festival'
+})[type];
+
 const Event = ({
     data,
     classes, width = '100%',
     showMonth = false,
     fromNow = true,
+    showEventType = false,
     showEditControls = false,
     requestEdition,
     requestDeletion
@@ -44,6 +51,11 @@ const Event = ({
             <div className={classes.pic} style={{ backgroundImage: `url(${data.getIn(['pic', 'url']) || data.getIn(['band', 'pic', 'url'])})` }} />
             <div className={classes.details}>
                 <div className={classes.event}>
+                    {
+                        showEventType && (
+                            <strong className={classes.type}>Tipo: {getName(data.get('type'))}</strong>
+                        )
+                    }
                     <h1 className={classes.name}>{data.get('name') || data.getIn(['band', 'name'], '')}</h1>
                     <div className={classes.time}>{moment(data.getIn(['date', 'iso'], '')).format('HH[h]mm[min]')}</div>
                 </div>
@@ -82,6 +94,11 @@ const styles = {
         '@media (max-width: 1366px)': {
             minWidth: '100%'
         }
+    },
+    type: {
+        textTransform: 'uppercase',
+        color: '#7C1808',
+        fontWeight: 900
     },
     left: {
         height: '100%',

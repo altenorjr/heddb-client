@@ -12,10 +12,14 @@ const convert = (object, state) => {
     const data = state.data.toJS();
 
     return conditionalUpload(data.newPic, object, 'pic')
-        .then(object => setFields(object, data, ['name', 'social']))
-        .then(object => setRefs(object, data, { band: 'Bands', venue: 'Venues' }))
+        .then(object => setFields(object, data, ['name', 'social', 'type']))
+        .then(object => setRefs(object, data, { venue: 'Venues' }))
         .then(object => {
             object.set('date', new Date(data.date.iso));
+
+            const Bands = new Parse.Object.extend('Bands');
+
+            object.set('bands', data.bands.map(({ objectId }) => Bands.createWithoutData(objectId)));
 
             if (!data.newPic && !(data.pic || {}).url) {
                 object.set('pic', null);
@@ -83,22 +87,28 @@ const types = (state = new List(), { type, metadata }) => {
     }
 };
 
-const selectCity = (selectedCity) => (dispatch, getState) => {
+const selectCity = (selectedCity, forceFilter = true) => (dispatch, getState) => {
     dispatch({ type: SET_FILTER_CITY, selectedCity });
 
-    filterEvents({ city: selectedCity })(dispatch, getState);
+    if (forceFilter) {
+        filterEvents({ city: selectedCity })(dispatch, getState);
+    }
 };
 
-const selectMonth = (selectedMonth) => (dispatch, getState) => {
+const selectMonth = (selectedMonth, forceFilter = true) => (dispatch, getState) => {
     dispatch({ type: SET_FILTER_MONTH, selectedMonth });
 
-    filterEvents({ month: selectedMonth })(dispatch, getState);
+    if (forceFilter) {
+        filterEvents({ month: selectedMonth })(dispatch, getState);
+    }
 };
 
-const selectType = (selectedType) => (dispatch, getState) => {
+const selectType = (selectedType, forceFilter = true) => (dispatch, getState) => {
     dispatch({ type: SET_FILTER_TYPE, selectedType });
 
-    filterEvents({ type: selectedType })(dispatch, getState);
+    if (forceFilter) {
+        filterEvents({ type: selectedType })(dispatch, getState);
+    }
 };
 
 const filterEvents = (filters = {}) => (dispatch, getState) => {
@@ -126,7 +136,10 @@ const filterEvents = (filters = {}) => (dispatch, getState) => {
         .then(({ cities, events, months, types }) => {
             const action = {
                 type: result.GET_RECORDS_SUCCESS,
-                data: fromJS(events.map(event => event.toJSON())),
+                data: fromJS(events.map(event => event.toJSON()).map(event => ({
+                    band: event.type !== 'festival' ? event.bands[0] || null : null,
+                    ...event
+                }))),
                 metadata: {}
             };
 

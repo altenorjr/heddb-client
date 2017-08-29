@@ -26,10 +26,10 @@ const states = (state = new List(), { type, metadata }) => {
 const selectState = (state) => (dispatch, getState) => {
     dispatch({ type: SET_FILTER_STATE, state });
 
-    filterRecords({ state })(dispatch, getState);
+    filterBands({ state })(dispatch, getState);
 };
 
-const filterRecords = (filters = {}) => (dispatch, getState) => {
+const filterBands = (filters = {}) => (dispatch, getState) => {
     dispatch({ type: result.GET_RECORDS_START });
 
     const {
@@ -70,7 +70,7 @@ const result = GenericCrudReducer('Bands', {
     actions: {
         SET_FILTER_STATE,
         selectState,
-        filterRecords
+        filterBands
     },
     reducers: {
         selectedState,

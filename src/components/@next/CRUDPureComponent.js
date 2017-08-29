@@ -8,7 +8,7 @@ import RefreshIndicator from 'material-ui/RefreshIndicator';
 import FilterPanel from '../FilterPanel';
 import Confirm from './Confirm';
 
-export default (name, Container, ListItem, Editor, Filters, loadFunction) => {
+export default (name, Container, ListItem, Editor, Filters, loadFunction, loadParams) => {
     class CRUDPureComponent extends PureComponent {
         static propTypes = {
             data: PropTypes.instanceOf(List),
@@ -22,7 +22,7 @@ export default (name, Container, ListItem, Editor, Filters, loadFunction) => {
         }
 
         componentDidMount = () => {
-            this.props[loadFunction]();
+            this.props[loadFunction](loadParams);
         }
 
         requestEdition = (item) => this.props.requestEdition(item);
@@ -30,11 +30,11 @@ export default (name, Container, ListItem, Editor, Filters, loadFunction) => {
 
         save = (objectId, data) => this.props.saveRecord(objectId, data)
             .then(() => this.props.requestEdition(null))
-            .then(() => this.props[loadFunction]());
+            .then(() => this.props[loadFunction](loadParams));
 
         delete = (id) => this.props.deleteRecord(id)
             .then(() => this.props.requestDeletion(null))
-            .then(() => this.props[loadFunction]());
+            .then(() => this.props[loadFunction](loadParams));
 
         renderEditor = () => {
             return (
@@ -70,6 +70,7 @@ export default (name, Container, ListItem, Editor, Filters, loadFunction) => {
                             top="64px"
                             filters={Filters}
                             adminMode
+                            fixed
                         />
                         {
                             loading && (

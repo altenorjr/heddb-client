@@ -32,13 +32,19 @@ class Calendar extends Component {
     createFilter = (props) => <DropDown {...props} />
 
     componentDidMount = () => {
-        this.props.selectType(this.props.type);
+        const currentMonth = moment(new Date()).startOf('month').toISOString();
+
+        this.props.selectType(this.props.type, false);
+        this.props.selectCity('all', false);
+        this.props.selectMonth(currentMonth, false);
+
         this.props.filterEvents({
-            month: this.props.selectedMonth,
-            city: this.props.selectedCity,
-            type: this.props.type
+            month: currentMonth,
+            city: 'all',
+            selectedType: this.props.type,
+            loadMetadata: true
         }).then(({ months }) => {
-            const currentMonth = this.props.selectedMonth;
+            const currentMonth = moment(new Date()).startOf('month').toISOString();
 
             if (months.map(m => m.value).indexOf(currentMonth) !== -1) {
                 return;
@@ -68,7 +74,7 @@ class Calendar extends Component {
         } = this.props;
 
         return (
-            <FilteredContainer filters={[
+            <FilteredContainer loading={loading} filters={[
                 this.createFilter({
                     items: months,
                     selectedValue: selectedMonth,
@@ -83,7 +89,7 @@ class Calendar extends Component {
             ]}>
                 {
                     loading && (
-                        <RefreshIndicator top={100} left={(window.innerWidth / 2) - 20} status="loading" />
+                        <RefreshIndicator top={350} left={(window.innerWidth / 2) - 20} status="loading" />
                     )
                 }
                 {

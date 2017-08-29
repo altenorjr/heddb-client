@@ -24,6 +24,7 @@ module.exports = GenericCRUDModule(
         <Month />
     ],
     {
-        loadFunction: 'filterEvents'
+        loadFunction: 'filterEvents',
+        loadParams: { shouldLoadMetadata: true }
     }
 );

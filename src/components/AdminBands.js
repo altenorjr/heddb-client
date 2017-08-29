@@ -18,6 +18,7 @@ module.exports = GenericCRUDModule(
     AdminBandEditor,
     [<State />],
     {
-        loadFunction: 'filterRecords'
+        loadFunction: 'filterBands',
+        loadParams: { shouldLoadMetadata: true }
     }
 );

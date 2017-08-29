@@ -6,6 +6,7 @@ const FilterPanel = ({
     className,
     classes,
     adminMode = false,
+    fixed = true,
     filters = []
 }) => {
     if (!filters || (Array.isArray(filters) && !filters.length)) {
@@ -16,7 +17,7 @@ const FilterPanel = ({
         <div className={cx(className, classes.filters)}>
             {
                 !!filters.length &&
-                filters.map((filter, i) => console.log({filter, i}) || <div key={i}>{filter}</div>)
+                filters.map((filter, i) => <div key={i}>{filter}</div>)
             }
         </div>
     );
@@ -32,7 +33,7 @@ export default jss({
         alignItems: 'center',
         justifyContent: ({ filters, adminMode }) => adminMode || filters.length === 1 ? 'flex-start' : 'space-between',
         backgroundColor: 'rgba(255, 255, 255, 0.85)',
-        position: 'fixed',
+        position: ({ fixed }) => fixed ? 'fixed' : 'static',
         top: ({ top = '224px' }) => top,
         zIndex: 90
     }

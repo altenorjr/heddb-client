@@ -21,16 +21,17 @@ const FilteredContainer = jss({
     filtersClassName,
     contentClassName,
     classes,
+    loading,
     filters = [],
     children
 }) => {
     return (
         <div className={className}>
             {
-                !!filters.length && (
+                !!filters.length && !loading && (
                     <Holder className={cx(classes.filterContainer, filtersClassName)}>
                         <Panel className={classes.filters}>
-                            <FilterPanel {...{ filters, autoPadding }} />
+                            <FilterPanel fixed={false} {...{ filters, autoPadding }} />
                         </Panel>
                     </Holder>
 

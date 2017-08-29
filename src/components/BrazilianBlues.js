@@ -13,7 +13,7 @@ import { createBoundFilter } from './GenericFilter';
 
 import {
     selectState,
-    filterRecords
+    filterBands
 } from '../redux/Bands';
 
 const StatesFilter = createBoundFilter('Bands', 'states', 'selectedState', 'selectState');
@@ -24,7 +24,7 @@ class UglyBrazilianBlues extends PureComponent {
         bands: PropTypes.instanceOf(List),
         selectedState: PropTypes.string.isRequired,
         selectState: PropTypes.func.isRequired,
-        filterRecords: PropTypes.func.isRequired,
+        filterBands: PropTypes.func.isRequired,
         loading: PropTypes.bool.isRequired
     }
 
@@ -32,7 +32,7 @@ class UglyBrazilianBlues extends PureComponent {
         selectedState: 'all'
     }
 
-    componentDidMount = () => this.props.filterRecords({ state: 'all' });
+    componentDidMount = () => this.props.filterBands({ state: 'all' });
 
     groupedBands = () => this.props.states.filter(s => s.get('value') !== 'all').map((state) => ({
         title: state.get('text'),
@@ -127,7 +127,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     selectState,
-    filterRecords 
+    filterBands 
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrazilianBlues)
