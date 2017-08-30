@@ -6,6 +6,7 @@ import drawer from './drawer';
 import bands from './Bands';
 import events from './Events';
 import venues from './Venues';
+import articles from './Articles';
 
 const reducer = combineReducers({
     authentication,
@@ -13,7 +14,8 @@ const reducer = combineReducers({
     drawer,
     bands,
     events,
-    venues
+    venues,
+    articles
 });
 
 export default reducer;

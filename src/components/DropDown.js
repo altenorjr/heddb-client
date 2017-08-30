@@ -14,7 +14,7 @@ const findSelectedValueText = (values, selectedValue) => {
     return (values.find((obj) => obj.get('value') === selectedValue) || new Map()).get('text', '');
 }
 
-class DropDownUnstyled extends Component {
+class DropDown extends Component {
     static propTypes = {
         items: PropTypes.instanceOf(List),
         selectedValue: PropTypes.string.isRequired,
@@ -45,7 +45,8 @@ class DropDownUnstyled extends Component {
                             &nbsp;{findSelectedValueText(items, selectedValue)}&nbsp;
                         </span>
                     </div>
-                )}>
+                )}
+            >
                 <ul className={classes.items}>
                     {
                         listOptions(items, selectedValue).map((item, i) => {
@@ -71,7 +72,7 @@ class DropDownUnstyled extends Component {
     }
 }
 
-const DropDown = jss({
+export default jss({
     items: {
         position: 'relative',
         listStyle: 'none',
@@ -115,6 +116,4 @@ const DropDown = jss({
     badge: {
         order: ({ align }) => align !== 'right' ? 1 : 0
     }
-})(DropDownUnstyled);
-
-export default DropDown;
+})(DropDown);

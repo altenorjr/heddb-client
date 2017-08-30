@@ -116,7 +116,7 @@ export default (name, Container, ListItem, Editor, Filters, loadFunction, loadPa
 
     return jss({
         content: {
-            paddingTop: '51px'
+            paddingTop: Filters.length ? '51px' : 0
         }
     })(CRUDPureComponent);
 }

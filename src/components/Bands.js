@@ -13,10 +13,8 @@ const Bands = (({ bands, classes, showStateInformation = false }) => (
     </div>
 ));
 
-const styles = {
+export default jss({
     bands: {
         width: '100%'
     }
-};
-
-export default jss(styles)(Bands);
+})(Bands);

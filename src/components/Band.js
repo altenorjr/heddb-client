@@ -1,5 +1,5 @@
 import React from 'react';
-import injectSheet from 'react-jss';
+import jss from 'react-jss';
 import { SocialIcon } from 'react-social-icons';
 import { Map, List } from 'immutable';
 
@@ -55,7 +55,7 @@ const Band = ({
     );
 };
 
-const styles = {
+export default jss({
     band: {
         minHeight: '250px',
         width: ({ width = '100%' }) => width,
@@ -99,6 +99,4 @@ const styles = {
         backgroundRepeat: 'no-repeat',
         backgroundImage: ({ data }) => `url(${data.getIn(['pic', 'url'], '')})`
     }
-};
-
-export default injectSheet(styles)(Band);
+})(Band);

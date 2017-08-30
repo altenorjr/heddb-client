@@ -28,8 +28,10 @@ export default (name, Container) => class CRUDEditorPureComponent extends PureCo
             return this.alert('Existem campos não preenchidos corretamente.');
         }
 
-        this.props.onSave(this.state.data.get('objectId'), this.state);
+        this.props.onSave(this.state.data.get('objectId'), this.marshallData());
     }
+
+    marshallData = () => this.state;
 
     alert = (alert) => this.setState({ alert })
 

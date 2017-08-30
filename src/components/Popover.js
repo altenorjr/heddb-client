@@ -2,10 +2,10 @@ import React from 'react';
 import jss from 'react-jss';
 import cx from 'classnames';
 
-const UglyPopover = ({children, className, title, classes, ...props }) => (
+const UglyPopover = ({children, className, contentClassName, title, classes, ...props }) => (
     <div className={cx(className, classes.popover)}>
         {title}
-        <div data-role="popover-content" className={classes.popoverContent}>
+        <div data-role="popover-content" className={cx(classes.popoverContent, contentClassName)}>
             {children}
         </div>
     </div>
