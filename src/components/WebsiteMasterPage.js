@@ -11,8 +11,7 @@ class WebsiteMasterPage extends PureComponent {
         const { 
             children, 
             classes, 
-            loading, 
-            sheet 
+            loading
         } = this.props;
 
         return (
@@ -26,7 +25,7 @@ class WebsiteMasterPage extends PureComponent {
                         <Holder>
                             <Panel>
                                 <p className={classes.curadoria}>
-                                    O sucesso deste projeto só se dá graças ao empoderamento feito pela iniciativa Pulsar da <a href="https://www.facebook.com/CuradoriaSocial/" target="_blank">Curadoria Social</a>
+                                    O sucesso deste projeto só se dá graças ao empoderamento feito pela iniciativa Pulsar da <a href="https://www.facebook.com/CuradoriaSocial/" rel="noopener noreferrer" target="_blank">Curadoria Social</a>
                                 </p>
                             </Panel>
                         </Holder>

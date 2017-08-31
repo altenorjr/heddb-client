@@ -7,8 +7,6 @@ import Holder from './Holder';
 import Panel from './Panel';
 import Menu from './Menu';
 
-import logo from '../static/img/heddb-logo.png';
-
 const TopBar = ({ classes }) => (
     <div className={classes.container}>
         <Holder className={classes.topBar}>

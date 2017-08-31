@@ -17,12 +17,9 @@ class Home extends PureComponent {
 
     render = () => {
         const {
-            className,
             classes,
             loading = false,
             events = new List(),
-            sheet,
-            children
         } = this.props;
 
         return (
@@ -62,21 +59,24 @@ class Home extends PureComponent {
                             <a
                                 href="https://google.com.br"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className={classes.sliderItem_PS1}
                                 style={{ backgroundImage: 'url(https://static.wixstatic.com/media/de661d_13a7b6eba67645948a07bdd6987e715b~mv2.png/v1/fill/w_454,h_254,al_c,lg_1/de661d_13a7b6eba67645948a07bdd6987e715b~mv2.png)' }}
-                            />
+                            >&nbsp;</a>
                             <a
                                 href="https://google.com.br"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className={classes.sliderItem_PS1}
                                 style={{ backgroundImage: 'url(https://static.wixstatic.com/media/de661d_2cca8274c6ad4eb38bd6e9828a809907~mv2.jpg/v1/fill/w_576,h_322,al_c,lg_1,q_80/de661d_2cca8274c6ad4eb38bd6e9828a809907~mv2.webp)' }}
-                            />
+                            >&nbsp;</a>
                             <a
                                 href="https://google.com.br"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className={classes.sliderItem_PS1}
                                 style={{ backgroundImage: 'url(https://static.wixstatic.com/media/de661d_b1340ab4a0c341e88faf0d61a3f39a1d~mv2.png/v1/fill/w_968,h_541,al_c,usm_0.66_1.00_0.01/de661d_b1340ab4a0c341e88faf0d61a3f39a1d~mv2.png)' }}
-                            />
+                            >&nbsp;</a>
                         </Slider>
                     </div>
                     <h1 className={classes.more}>Destaques</h1>
@@ -93,21 +93,24 @@ class Home extends PureComponent {
                         <a
                             href="https://google.com.br"
                             target="_blank"
+                            rel="noopener noreferrer"
                             className={classes.sliderItem_PS2}
                             style={{ backgroundImage: 'url(https://static.wixstatic.com/media/de661d_13a7b6eba67645948a07bdd6987e715b~mv2.png/v1/fill/w_454,h_254,al_c,lg_1/de661d_13a7b6eba67645948a07bdd6987e715b~mv2.png)' }}
-                        />
+                        >&nbsp;</a>
                         <a
                             href="https://google.com.br"
                             target="_blank"
+                            rel="noopener noreferrer"
                             className={classes.sliderItem_PS2}
                             style={{ backgroundImage: 'url(https://static.wixstatic.com/media/de661d_2cca8274c6ad4eb38bd6e9828a809907~mv2.jpg/v1/fill/w_576,h_322,al_c,lg_1,q_80/de661d_2cca8274c6ad4eb38bd6e9828a809907~mv2.webp)' }}
-                        />
+                        >&nbsp;</a>
                         <a
                             href="https://google.com.br"
                             target="_blank"
+                            rel="noopener noreferrer"
                             className={classes.sliderItem_PS2}
                             style={{ backgroundImage: 'url(https://static.wixstatic.com/media/de661d_b1340ab4a0c341e88faf0d61a3f39a1d~mv2.png/v1/fill/w_968,h_541,al_c,usm_0.66_1.00_0.01/de661d_b1340ab4a0c341e88faf0d61a3f39a1d~mv2.png)' }}
-                        />
+                        >&nbsp;</a>
                     </Slider>
                 </Panel>
             </Holder>

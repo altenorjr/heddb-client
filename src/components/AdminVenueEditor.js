@@ -29,16 +29,14 @@ class AdminVenueEditorUgly extends CRUDEditorPureComponent('Casa de Shows', Admi
         const
             objectId = data.get('objectId', ''),
             name = data.get('name', ''),
-            bio = data.get('bio', ''),
             state = data.get('state', ''),
             city = data.get('city', ''),
             address = data.get('address', ''),
-            phone = data.get('phone', ''),
             newPic = data.get('newPic');
 
         let valid = true;
 
-        if ([name, bio, city, state, address].indexOf('') !== -1) {
+        if ([name, city, state, address].indexOf('') !== -1) {
             valid = false;
         }
 

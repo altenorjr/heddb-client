@@ -4,9 +4,8 @@ import MenuItem from 'material-ui/MenuItem';
 import jss from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Switch, Route, Redirect, NavLink } from 'react-router-dom';
+import { Switch, Route, Redirect, NavLink, Link } from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
-import logo from '../static/img/heddb-logo.png';
 
 import withDimensions from './hoc/withDimensions';
 import { logout } from '../redux/authentication';
@@ -52,7 +51,9 @@ class AdminMasterPage extends PureComponent {
                     onRequestChange={this.toggleDrawer}
                 >
                     <div className={classes.logoHolder}>
-                        <img src={logo} alt="Hoje é dia de Blues - Sistema Administrativo" />
+                        <Link to="/" target="_blank">
+                            <img src="/img/heddb-logo.png" alt="Hoje é dia de Blues - Sistema Administrativo" />
+                        </Link>
                     </div>
                     <Menu className={classes.menu}>
                         {
@@ -96,7 +97,8 @@ const AdminMasterPageStyled = withDimensions(jss({
         height: '150px',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#2F2E33'
     },
     menu: {
         width: '256px !important'
