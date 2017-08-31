@@ -9,7 +9,7 @@ import FilterPanel from './FilterPanel';
 const FilteredContainer = jss({
     filterContainer: {
         position: 'fixed',
-        top: '224px',
+        top: '198px',
         zIndex: 5
     },
     content: {

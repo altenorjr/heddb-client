@@ -3,6 +3,7 @@ import jss from 'react-jss';
 
 import TopBar from './TopBar';
 import Holder from './Holder';
+import Panel from './Panel';
 
 const UglyWebsiteMasterPage = ({ children, classes, sheet }) => (
     <div>
@@ -10,12 +11,17 @@ const UglyWebsiteMasterPage = ({ children, classes, sheet }) => (
         <Holder className={classes.body}>
             {children}
         </Holder>
+        <Holder>
+            <Panel>
+
+            </Panel>
+        </Holder>
     </div>
 );
 
 const WebsiteMasterPage = jss({
     body: {
-        paddingTop: '224px'
+        paddingTop: '199px'
     }
 })(UglyWebsiteMasterPage);
 

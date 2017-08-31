@@ -18,6 +18,8 @@ const Event = ({
     data,
     classes, width = '100%',
     showMonth = false,
+    showHour = false,
+    mini = false,
     fromNow = true,
     showEventType = false,
     showEditControls = false,
@@ -29,7 +31,12 @@ const Event = ({
             <div className={classes.left}>
                 <div className={classes.date}>
                     {padLeft(moment(data.getIn(['date', 'iso'], '')).format('DD').toString(), 2, '0')}
-                    {showMonth && ('/' + padLeft(moment(data.getIn(['date', 'iso'], '')).format('MMM').toLowerCase(), 2, '0'))}
+                    {showMonth && ('/' + moment(data.getIn(['date', 'iso'], '')).format('MM'))}
+                    {
+                        showHour && (
+                            <span className={classes.hour}>{moment(data.getIn(['date', 'iso'], '')).format('HH[h]mm[min]')}</span>
+                        )
+                    }
                     {
                         fromNow && (
                             <small className={classes.fromNow}>{moment(data.getIn(['date', 'iso'], '')).fromNow()}</small>
@@ -48,7 +55,7 @@ const Event = ({
                     )
                 }
             </div>
-            <div className={classes.pic} style={{ backgroundImage: `url(${data.getIn(['pic', 'url']) || data.getIn(['band', 'pic', 'url'])})` }} />
+            <div className={classes.pic} style={{ backgroundImage: `url(${data.getIn(['pic', 'url']) || data.getIn(['bands', 0, 'pic', 'url'])})` }} />
             <div className={classes.details}>
                 <div className={classes.event}>
                     {
@@ -57,13 +64,28 @@ const Event = ({
                         )
                     }
                     <h1 className={classes.name}>{data.get('name') || data.getIn(['band', 'name'], '')}</h1>
-                    <div className={classes.time}>{moment(data.getIn(['date', 'iso'], '')).format('HH[h]mm[min]')}</div>
+                    {
+                        !showHour && (
+                            <div className={classes.time}>{moment(data.getIn(['date', 'iso'], '')).format('HH[h]mm[min]')}</div>
+                        )
+                    }
                 </div>
                 <div className={classes.venue}>
                     <h2 className={classes.venueName}>{data.getIn(['venue', 'name'], '')}</h2>
                     <div className={classes.address}>{data.getIn(['venue', 'address'], '')}</div>
                     <div className={classes.city}>{data.getIn(['venue', 'city'], '')} - {data.getIn(['venue', 'state'], '').toUpperCase()}</div>
-                    <div><a className={classes.phone} href={`tel:+55${data.getIn(['venue', 'phone'], '').replace(/[^0-9]/gi, '')}`}>{data.getIn(['venue', 'phone'], '')}</a></div>
+                    {
+                        data.getIn(['venue', 'phone']) && (
+                            <div>
+                                <a 
+                                    className={classes.phone} 
+                                    href={`tel:+55${data.getIn(['venue', 'phone'], '').replace(/[^0-9]/gi, '')}`}
+                                >
+                                    {data.getIn(['venue', 'phone'], '')}
+                                </a>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
             {
@@ -88,7 +110,7 @@ const styles = {
         alignItems: 'flex-start',
         backgroundColor: '#E5E5E5',
         fontWeight: 200,
-        height: '275px',
+        height: ({ mini }) => mini ? '185px' : '275px',
         // boxShadow: '0px 0px 20px rgba(127, 127, 127, 0.5)',
         minWidth: '650px',
         '@media (max-width: 1366px)': {
@@ -114,6 +136,14 @@ const styles = {
         fontWeight: 200,
         color: 'rgba(255, 255, 255, 0.6)'
     },
+    hour: {
+        display: 'block',
+        fontSize: '14px',
+        textAlign: 'center',
+        marginTop: '5px',
+        fontWeight: '200',
+        color: 'rgba(255, 255, 255, 0.6)'
+    },
     date: {
         padding: '45px',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -124,12 +154,14 @@ const styles = {
         textAlign: 'center'
     },
     pic: {
-        width: '230px',
-        height: '230px',
+        width: ({ mini }) => mini ? '145px' : '230px',
+        height: ({ mini }) => mini ? '145px' : '230px',
         backgroundSize: 'cover',
+        borderRadius: ({ mini }) => mini ? '10px' : '0',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        margin: '0 10px 0 10px'
+        margin: '0 10px 0 10px',
+        backgroundColor: '#000'
     },
     details: {
         flex: 1,
@@ -146,7 +178,7 @@ const styles = {
         margin: '0',
         textTransform: 'uppercase',
         fontWeight: '300',
-        fontSize: '50px'
+        fontSize: ({ mini }) => mini ? '35px' : '50px'
     },
     time: {
         fontWeight: 200

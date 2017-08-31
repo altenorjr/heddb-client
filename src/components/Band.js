@@ -92,7 +92,7 @@ export default jss({
     },
     picBox: {
         width: '30%',
-        backgroundColor: '#FFF',
+        backgroundColor: '#000',
         textAlign: 'center',
         backgroundPosition: 'center',
         backgroundSize: 'cover',

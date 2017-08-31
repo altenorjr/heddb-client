@@ -7,6 +7,8 @@ const { conditionalUpload, setFields, setRefs } = require('../parse/util');
 const SET_FILTER_CITY = `@client/events/SET_FILTER_CITY`;
 const SET_FILTER_MONTH = `@client/events/SET_FILTER_MONTH`;
 const SET_FILTER_TYPE = `@client/events/SET_FILTER_TYPE`;
+const GET_UPCOMING_START = `@client/events/GET_UPCOMING_START`;
+const GET_UPCOMING_SUCCESS = `@client/events/GET_UPCOMING_SUCCESS`;
 
 const convert = (object, state) => {
     const data = state.data.toJS();
@@ -43,6 +45,28 @@ const selectedCity = (state = 'all', { type, selectedCity }) => {
             return state;
     }
 };
+
+const upcoming = (state = new List(), { type, data }) => {
+    switch (type) {
+        case GET_UPCOMING_SUCCESS:
+            return data;
+        default:
+            return state;
+    }
+}
+
+const loading = (state = false, { type }) => {
+    switch (type) {
+        case result.GET_RECORDS_START:
+        case GET_UPCOMING_START:
+            return true;
+        case result.GET_RECORDS_SUCCESS:
+        case GET_UPCOMING_SUCCESS:
+            return false;
+        default:
+            return state;
+    }
+}
 
 const selectedMonth = (state = moment().startOf('month').toISOString(), { type, selectedMonth }) => {
     switch (type) {
@@ -113,6 +137,19 @@ const selectType = (selectedType, forceFilter = true) => (dispatch, getState) =>
     }
 };
 
+const getUpcomingEvents = () => (dispatch, getState) => {
+    dispatch({ type: GET_UPCOMING_START });
+
+    Parse.Cloud.run('getUpcomingEvents')
+        .then((events) => events.map(event => event.toJSON()))
+        .then((events) => {
+            dispatch({
+                type: GET_UPCOMING_SUCCESS,
+                data: fromJS(events)
+            })
+        })
+};
+
 const filterEvents = (filters = {}) => (dispatch, getState) => {
     const { city, month, loadMetadata, type } = filters;
 
@@ -166,6 +203,8 @@ const result = GenericCrudReducer('Events', {
         selectedType,
         cities,
         months,
+        loading,
+        upcoming,
         types
     },
     actions: {
@@ -175,6 +214,7 @@ const result = GenericCrudReducer('Events', {
         selectCity,
         selectMonth,
         selectType,
+        getUpcomingEvents,
         filterEvents
     }
 });

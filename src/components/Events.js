@@ -10,6 +10,8 @@ const Events = ({
     padding = '30px',
     width = '100%',
     showMonth = false,
+    showHour = false,
+    mini = false,
     fromNow = true
 }) => {
     if (events.size) {
@@ -17,7 +19,7 @@ const Events = ({
             <div className={classes.events}>
                 {
                     events.map((data, i) => (
-                        <Event {...{ width, showMonth, fromNow, data, key: i }} />
+                        <Event {...{ width, showMonth, showHour, mini, fromNow, data, key: i }} />
                     ))
                 }
             </div>
@@ -26,7 +28,7 @@ const Events = ({
     else {
         return (
             <div className={classes.empty}>
-                <p className={classes.message}>Nenhum evento encontrado</p>
+                <p className={classes.message}>Blues não encontrado</p>
                 <div className={classes.emoji}><Emoji description="Que triste..." value="😨" /></div>
             </div>
         );

@@ -1,5 +1,7 @@
 import React from 'react';
 import jss from 'react-jss';
+import Slider from 'react-slick';
+
 
 import Holder from './Holder';
 import Panel from './Panel';
@@ -11,8 +13,18 @@ const TopBar = ({ classes }) => (
     <div className={classes.container}>
         <Holder className={classes.topBar}>
             <Panel className={classes.mainContent}>
-                <img src={logo} alt="Hoje é dia de Blues - Logo" className={classes.logo} />
-                <img src="./img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
+                <img src="/img/heddb-logo.png" alt="Hoje é dia de Blues" />
+                <Slider 
+                    className={classes.slider}
+                    arrows={false}
+                    dots={false}
+                    autoplay
+                    autoplaySpeed={8000}
+                >
+                    <div className={classes.sliderItem}>
+                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
+                    </div>
+                </Slider>
             </Panel>
         </Holder>
         <Menu />
@@ -23,11 +35,11 @@ const styles = {
     container: {
         position: 'fixed',
         top: -1,
-        height: '225px',
+        height: '124px',
         zIndex: 9
     },
     topBar: {
-        background: 'rgba(255, 255, 255, .8)',
+        background: '#2F2E33',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -40,7 +52,7 @@ const styles = {
             display: 'block',
             position: 'absolute',
             content: '" "',
-            backgroundColor: 'rgba(255, 255, 255, .85)',
+            backgroundColor: '#2F2E33',
             backgroundSize: 'cover',
             filter: 'blur(20px)'
         } 
@@ -49,7 +61,17 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: '150px',
+        height: '124px',
+    },
+    slider: {
+        width: '500px'
+    },
+    sliderItem: {
+        width: '100%',
+        textAlign: 'right',
+        '& img': {
+            display: 'inline'
+        }
     }
 };
 

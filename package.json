@@ -46,7 +46,6 @@
     "dotenv": "^4.0.0",
     "dotenv-save": "^1.2.0",
     "gh-pages": "^1.0.0",
-    "nightmare": "^2.10.0",
     "nodemon": "^1.11.0",
     "redux-devtools-extension": "^2.13.2"
   },

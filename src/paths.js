@@ -33,6 +33,7 @@ export const websitePaths = [
     {
         path: '/',
         name: 'Início',
+        virtual: true,
         component: Home
     }, {
         path: '/agenda',

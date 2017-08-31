@@ -7,6 +7,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import 'normalize.css';
 import './static/styles/global.css';
 
+import './static/styles/slick.css';
+
 moment.locale('pt-br');
 
 injectTapEventPlugin();

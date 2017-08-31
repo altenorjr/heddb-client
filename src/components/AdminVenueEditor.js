@@ -38,7 +38,7 @@ class AdminVenueEditorUgly extends CRUDEditorPureComponent('Casa de Shows', Admi
 
         let valid = true;
 
-        if ([name, bio, city, state, address, phone].indexOf('') !== -1) {
+        if ([name, bio, city, state, address].indexOf('') !== -1) {
             valid = false;
         }
 

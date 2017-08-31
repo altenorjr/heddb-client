@@ -26,10 +26,29 @@ class Menu extends PureComponent {
         return (
             <Holder className={classes.menuHolder}>
                 <Panel className={cx(classes.menu, "accent-font")} element="ul">
+                    <li className={classes.menuItem}>
+                        <NavLink 
+                            to="/" 
+                            data-role="link" 
+                            className={classes.link} 
+                            activeClassName={classes.activeLink}
+                            exact 
+                        >
+                            Início
+                        </NavLink>
+                    </li>
                     {
                         websitePaths.filter(path => !path.virtual).map(({ path, name }, i) => (
                             <li key={i} className={classes.menuItem}>
-                                <NavLink to={path} data-role="link" exact className={classes.link} activeClassName={classes.activeLink}>{name}</NavLink>
+                                <NavLink 
+                                    to={path} 
+                                    data-role="link" 
+                                    className={classes.link} 
+                                    activeClassName={classes.activeLink}
+                                    exact 
+                                >
+                                    {name}
+                                </NavLink>
                             </li>
                         ))
                     }
@@ -108,7 +127,6 @@ Menu = jss({
         zIndex: 10
     },
     menu: {
-        borderTop: '1px solid #CCC',
         borderBottom: '1px solid #CCC',
         flexDirection: 'row',
         height: '75px',

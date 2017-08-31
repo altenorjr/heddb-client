@@ -109,7 +109,7 @@ const styles = {
         margin: 0,
         padding: '0 20px',
         position: 'sticky',
-        top: '225px',
+        top: '198px',
         zIndex: 6,
         pointerEvents: 'none'
     }
