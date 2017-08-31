@@ -75,7 +75,7 @@ const Event = ({
                     <div className={classes.address}>{data.getIn(['venue', 'address'], '')}</div>
                     <div className={classes.city}>{data.getIn(['venue', 'city'], '')} - {data.getIn(['venue', 'state'], '').toUpperCase()}</div>
                     {
-                        data.getIn(['venue', 'phone']) && (
+                        data.getIn(['venue', 'phone'], false) && (
                             <div>
                                 <a 
                                     className={classes.phone} 

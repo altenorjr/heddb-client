@@ -18,9 +18,26 @@ const TopBar = ({ classes }) => (
                     className={classes.slider}
                     arrows={false}
                     dots={false}
-                    autoplay
-                    autoplaySpeed={8000}
+                    autoplay={true}
+                    slidesToShow={1}
+                    slidesToScroll={1}
+                    autoplaySpeed={5000}
                 >
+                    <div className={classes.sliderItem}>
+                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
+                    </div>
+                    <div className={classes.sliderItem}>
+                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
+                    </div>
+                    <div className={classes.sliderItem}>
+                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
+                    </div>
+                    <div className={classes.sliderItem}>
+                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
+                    </div>
+                    <div className={classes.sliderItem}>
+                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
+                    </div>
                     <div className={classes.sliderItem}>
                         <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
                     </div>

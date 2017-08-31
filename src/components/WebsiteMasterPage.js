@@ -1,28 +1,59 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import jss from 'react-jss';
 
 import TopBar from './TopBar';
 import Holder from './Holder';
 import Panel from './Panel';
 
-const UglyWebsiteMasterPage = ({ children, classes, sheet }) => (
-    <div>
-        <TopBar />
-        <Holder className={classes.body}>
-            {children}
-        </Holder>
-        <Holder>
-            <Panel>
+class WebsiteMasterPage extends PureComponent {
+    render = () => {
+        const { 
+            children, 
+            classes, 
+            loading, 
+            sheet 
+        } = this.props;
 
-            </Panel>
-        </Holder>
-    </div>
-);
+        return (
+            <div>
+                <TopBar />
+                <Holder className={classes.body}>
+                    {children}
+                </Holder>
+                {
+                    !loading && (
+                        <Holder>
+                            <Panel>
+                                <p className={classes.curadoria}>
+                                    O sucesso deste projeto só se dá graças ao empoderamento feito pela iniciativa Pulsar da <a href="https://www.facebook.com/CuradoriaSocial/" target="_blank">Curadoria Social</a>
+                                </p>
+                            </Panel>
+                        </Holder>
+                    )
+                }
+            </div>
+        );
+    }
+}
 
-const WebsiteMasterPage = jss({
+WebsiteMasterPage = jss({
     body: {
         paddingTop: '199px'
+    },
+    curadoria: {
+        fontSize: '12px',
+        textAlign: 'center',
+        padding: '30px 0',
+        width: '100%',
+        '& a': {
+            color: '#5A9CF2'
+        }
     }
-})(UglyWebsiteMasterPage);
+})(WebsiteMasterPage);
 
-export default WebsiteMasterPage;
+const mapStateToProps = (state) => ({
+    loading: state.getIn(['events', 'loading']) || state.getIn(['bands', 'loading']) || state.getIn(['venues', 'loading']) || state.getIn(['articles', 'loading']) || false
+})
+
+export default connect(mapStateToProps)(WebsiteMasterPage);

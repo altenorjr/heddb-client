@@ -19,23 +19,31 @@ const Venue = ({
                 <h1 className={classes.name}>{data.get('name', '')}</h1>
                 <p>
                     {data.getIn(['address'])} - {data.getIn(['city'])} - {data.getIn(['state'])}<br />
-                    <small>{data.getIn(['phone'])}</small>
-                </p>
-                <div className={classes.links}>
                     {
-                        data.get('social', new List()).map((link, i) => (
-                            <SocialIcon
-                                key={i}
-                                url={link}
-                                style={{
-                                    marginRight: '10px',
-                                    width: '30px',
-                                    height: '30px'
-                                }}
-                            />
-                        ))
+                        data.get('phone') && (
+                            <small>{data.getIn(['phone'])}</small>
+                        )
                     }
-                </div>
+                </p>
+                {
+                    !!(data.get('social') || new List()).size && (
+                        <div className={classes.links}>
+                            {
+                                (data.get('social') || new List()).map((link, i) => (
+                                    <SocialIcon
+                                        key={i}
+                                        url={link}
+                                        style={{
+                                            marginRight: '10px',
+                                            width: '30px',
+                                            height: '30px'
+                                        }}
+                                    />
+                                ))
+                            }
+                        </div>
+                    )
+                }
             </div>
             {
                 showEditControls && (
@@ -72,7 +80,7 @@ const styles = {
         width: '70%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'flex-start',
     },
     name: {
@@ -88,7 +96,7 @@ const styles = {
     },
     picBox: {
         width: '30%',
-        backgroundColor: '#FFF',
+        backgroundColor: '#000',
         textAlign: 'center',
         backgroundPosition: 'center',
         backgroundSize: 'cover',

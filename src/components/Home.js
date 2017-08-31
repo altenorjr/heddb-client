@@ -53,10 +53,11 @@ class Home extends PureComponent {
                             className={classes.publicitySpot1}
                             arrows={false}
                             dots={true}
-                            autoplay
+                            autoplay={true}
                             slidesToShow={1}
                             slidesToScroll={1}
                             autoplaySpeed={5000}
+                            centerMode={true}
                         >
                             <a
                                 href="https://google.com.br"
@@ -87,6 +88,7 @@ class Home extends PureComponent {
                         slidesToShow={1}
                         slidesToScroll={1}
                         autoplaySpeed={5000}
+                        centerMode={true}
                     >
                         <a
                             href="https://google.com.br"
@@ -135,7 +137,6 @@ Home = jss({
     publicitySpot1: {
         width: '300px',
         height: '595px',
-        backgroundColor: '#F00',
         marginLeft: '15px'
     },
     sliderItem_PS1: {
