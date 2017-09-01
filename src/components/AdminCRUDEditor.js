@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import jss from 'react-jss';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import DoneIcon from 'material-ui/svg-icons/action/done';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 
-class AdminCRUDEditorUgly extends PureComponent {
+class AdminCRUDEditor extends PureComponent {
     static propTypes = {
         name: PropTypes.string.isRequired,
+        loading: PropTypes.bool.isRequired,
         isInsert: PropTypes.bool.isRequired,
         onSave: PropTypes.func.isRequired,
         onDismiss: PropTypes.func.isRequired
@@ -20,12 +22,13 @@ class AdminCRUDEditorUgly extends PureComponent {
             classes,
             className,
             name,
+            loading,
             isInsert,
             children
         } = this.props;
 
         return (
-            <form 
+            <form
                 onSubmit={(e) => e.preventDefault() || this.props.onSave()}
                 className={cx(classes.editor, className)}
             >
@@ -33,25 +36,38 @@ class AdminCRUDEditorUgly extends PureComponent {
                     {isInsert ? 'Inserir' : 'Editar'} {name}
                 </h1>
                 <div>{children}</div>
-                <FloatingActionButton
-                    type="submit"
-                    className={cx(classes.actions, classes.save)}
-                >
-                    <DoneIcon />
-                </FloatingActionButton>
-                <FloatingActionButton
-                    className={cx(classes.actions, classes.close)}
-                    onTouchTap={() => this.props.onDismiss()}
-                    secondary
-                >
-                    <CloseIcon />
-                </FloatingActionButton>
+                {
+                    !loading && (
+                        <div>
+                            <FloatingActionButton
+                                type="submit"
+                                className={cx(classes.actions, classes.save)}
+                            >
+                                <DoneIcon />
+                            </FloatingActionButton>
+                            <FloatingActionButton
+                                className={cx(classes.actions, classes.close)}
+                                onTouchTap={() => this.props.onDismiss()}
+                                secondary
+                            >
+                                <CloseIcon />
+                            </FloatingActionButton>
+                        </div>
+                    )
+                }
+                {
+                    loading && (
+                        <div className={cx(classes.actions, classes.save)}>
+                            <CircularProgress />
+                        </div>
+                    )
+                }
             </form>
         );
     }
 }
 
-const AdminCRUDEditor = jss({
+export default jss({
     editor: {
         overflowX: 'hidden',
         overflowY: 'auto',
@@ -78,6 +94,4 @@ const AdminCRUDEditor = jss({
     close: {
         left: '30px'
     }
-})(AdminCRUDEditorUgly);
-
-export default AdminCRUDEditor;
+})(AdminCRUDEditor);

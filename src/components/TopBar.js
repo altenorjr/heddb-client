@@ -1,45 +1,20 @@
 import React from 'react';
 import jss from 'react-jss';
-import Slider from 'react-slick';
-
 
 import Holder from './Holder';
 import Panel from './Panel';
 import Menu from './Menu';
 
-const TopBar = ({ classes }) => (
+import publicityZoneFactory from './PublicityZone';
+
+const BannerPublicityZone = publicityZoneFactory('banner');
+
+let TopBar = ({ classes }) => (
     <div className={classes.container}>
         <Holder className={classes.topBar}>
             <Panel className={classes.mainContent}>
                 <img src="/img/heddb-logo.png" alt="Hoje é dia de Blues" />
-                <Slider 
-                    className={classes.slider}
-                    arrows={false}
-                    dots={false}
-                    autoplay={true}
-                    slidesToShow={1}
-                    slidesToScroll={1}
-                    autoplaySpeed={5000}
-                >
-                    <div className={classes.sliderItem}>
-                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
-                    </div>
-                    <div className={classes.sliderItem}>
-                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
-                    </div>
-                    <div className={classes.sliderItem}>
-                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
-                    </div>
-                    <div className={classes.sliderItem}>
-                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
-                    </div>
-                    <div className={classes.sliderItem}>
-                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
-                    </div>
-                    <div className={classes.sliderItem}>
-                        <img src="/img/antena-zero.png" alt="Antena Zero" className={classes.logo} />
-                    </div>
-                </Slider>
+                <BannerPublicityZone dots={false} />
             </Panel>
         </Holder>
         <Menu />
@@ -70,7 +45,7 @@ const styles = {
             backgroundColor: '#2F2E33',
             backgroundSize: 'cover',
             filter: 'blur(20px)'
-        } 
+        }
     },
     mainContent: {
         flexDirection: 'row',
@@ -82,14 +57,11 @@ const styles = {
         width: '500px'
     },
     sliderItem: {
-        width: '100%',
+        width: '500px',
         height: '124px',
-        display: 'flex !important',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        '& img': {
-            display: 'inline'
-        }
+        display: 'block',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
     }
 };
 

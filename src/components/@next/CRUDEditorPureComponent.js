@@ -1,65 +1,83 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 
 import Alert from './Alert';
 
-export default (name, Container) => class CRUDEditorPureComponent extends PureComponent {
-    static propTypes = {
-        data: PropTypes.instanceOf(Map),
-        onSave: PropTypes.func.isRequired,
-        onClose: PropTypes.func.isRequired
-    }
+const defaultUpdateStateValue = (path, value) => ({ data }) => ({ data: data.setIn(path, value) });
 
-    state = {
-        data: null,
-        alert: null
-    }
+export const updateStateValue = defaultUpdateStateValue;
 
-    componentWillReceiveProps = (next) => this.setState({ data: next.data });
+export default (name, reduxPath, Container, behaviour = {}) => {
+    const {
+        validate = () => false,
+        renderContent = () => <div />,
+        updateStateValue = defaultUpdateStateValue
+    } = behaviour;
 
-    updateStateValue = (path, value) => this.setState(({ data }) => ({ data: data.setIn(path, value) }));
-
-    validate = (props, state) => { throw new Error("You must override the method 'validate'") }
-    renderContent = (props, state) => { throw new Error("You must override the method 'renderContent'") }
-
-    save = () => {
-        if (!this.validate()) {
-            return this.alert('Existem campos não preenchidos corretamente.');
+    class CRUDEditorPureComponent extends PureComponent {
+        static propTypes = {
+            data: PropTypes.instanceOf(Map),
+            loading: PropTypes.bool.isRequired,
+            onSave: PropTypes.func.isRequired,
+            onClose: PropTypes.func.isRequired
         }
 
-        this.props.onSave(this.state.data.get('objectId'), this.marshallData());
-    }
-
-    marshallData = () => this.state;
-
-    alert = (alert) => this.setState({ alert })
-
-    render = () => {
-        const { data } = this.state;
-
-        if (!data) {
-            return (<div />);
+        state = {
+            data: null,
+            alert: null
         }
 
-        return (
-            <Container
-                name={name}
-                isInsert={!data.get('objectId')}
-                onSave={this.save}
-                onDismiss={() => this.props.onClose()}
-            >
-                {this.renderContent()}
-                {
-                    this.state.alert && (
-                        <Alert
-                            onDismiss={() => this.alert()}
-                        >
-                            {this.state.alert}
-                        </Alert>
-                    )
-                }
-            </Container>
-        );
+        updateStateValue = (path, value) => this.setState(updateStateValue(path, value, this.props));
+
+        componentWillReceiveProps = (next) => this.setState({ data: next.data });
+
+        save = () => {
+            if (!validate(this.props, this.state)) {
+                return this.alert('Existem campos não preenchidos corretamente.');
+            }
+
+            this.props.onSave(this.state.data.get('objectId'), this.state);
+        }
+
+        alert = (alert) => this.setState({ alert })
+
+        render = () => {
+            const { data } = this.state;
+
+            const { loading } = this.props;
+
+            if (!data) {
+                return (<div />);
+            }
+
+            return (
+                <Container
+                    name={name}
+                    loading={loading}
+                    isInsert={!data.get('objectId')}
+                    onSave={this.save}
+                    onDismiss={() => this.props.onClose()}
+                >
+                    {renderContent.call(this, this.props, this.state)}
+                    {
+                        this.state.alert && (
+                            <Alert
+                                onDismiss={() => this.alert()}
+                            >
+                                {this.state.alert}
+                            </Alert>
+                        )
+                    }
+                </Container>
+            );
+        }
     }
+
+    const mapStateToProps = (state) => ({
+        loading: state.getIn([reduxPath, 'loading'])
+    })
+
+    return connect(mapStateToProps, {})(CRUDEditorPureComponent);
 }

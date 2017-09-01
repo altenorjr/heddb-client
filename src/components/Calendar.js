@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import jss from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -10,6 +11,10 @@ import DropDown from './DropDown';
 import FilteredContainer from './FilteredContainer';
 
 import { filterEvents, selectMonth, selectCity, selectType } from '../redux/Events';
+
+import publicityZoneFactory from './PublicityZone';
+
+const SidebarPublicityZone = publicityZoneFactory('sidebar');
 
 class Calendar extends Component {
     static propTypes = {
@@ -65,6 +70,7 @@ class Calendar extends Component {
 
     render = () => {
         const {
+            classes,
             events,
             months,
             selectedMonth,
@@ -74,38 +80,63 @@ class Calendar extends Component {
         } = this.props;
 
         return (
-            <FilteredContainer loading={loading} filters={[
-                this.createFilter({
-                    items: months,
-                    selectedValue: selectedMonth,
-                    onSelectedValueChanged: this.selectedMonthChanged
-                }),
-                this.createFilter({
-                    items: cities,
-                    align: 'right',
-                    selectedValue: selectedCity,
-                    onSelectedValueChanged: this.selectedCityChanged
-                })
-            ]}>
+            <FilteredContainer
+                className={classes.holder}
+                loading={loading}
+                filters={[
+                    this.createFilter({
+                        items: months,
+                        selectedValue: selectedMonth,
+                        onSelectedValueChanged: this.selectedMonthChanged
+                    }),
+                    this.createFilter({
+                        items: cities,
+                        align: 'right',
+                        selectedValue: selectedCity,
+                        onSelectedValueChanged: this.selectedCityChanged
+                    })
+                ]}
+            >
                 {
                     loading && (
                         <RefreshIndicator top={350} left={(window.innerWidth / 2) - 20} status="loading" />
                     )
                 }
-                {
-                    !loading && (
-                        <Events
-                            width="100%"
-                            events={events}
-                            showMonth={selectedMonth === 'all'}
-                            fromNow={false}
-                        />
-                    )
-                }
+                <div className={classes.content}>
+                    <Events
+                        loading={loading}
+                        className={classes.events}
+                        width="100%"
+                        events={events}
+                        showMonth={selectedMonth === 'all'}
+                        fromNow={false}
+                    />
+                    <SidebarPublicityZone className={classes.sidebar} />
+                </div>
             </FilteredContainer>
         );
     }
 }
+
+Calendar = jss({
+    holder: {
+        position: 'relative'
+    },
+    content: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end'
+    },
+    events: {
+        flex: 1,
+        marginLeft: '5px'
+    },
+    sidebar: {
+        marginLeft: '15px',
+        position: 'sticky',
+        top: '274px'
+    }
+})(Calendar);
 
 const mapStateToProps = (state) => ({
     events: state.getIn(['events', 'data']),

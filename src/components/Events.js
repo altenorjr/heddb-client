@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import jss from 'react-jss';
 
 import Event from './Event';
@@ -6,7 +7,9 @@ import Emoji from './Emoji';
 
 const Events = ({
     events,
+    loading,
     classes,
+    className,
     padding = '30px',
     width = '100%',
     showMonth = false,
@@ -14,9 +17,15 @@ const Events = ({
     mini = false,
     fromNow = true
 }) => {
+    if (loading) {
+        return (
+            <div className={classes.holder}>&nbsp;</div>
+        );
+    }
+
     if (events.size) {
         return (
-            <div className={classes.events}>
+            <div className={cx(classes.events, className)}>
                 {
                     events.map((data, i) => (
                         <Event {...{ width, showMonth, showHour, mini, fromNow, data, key: i }} />
@@ -58,6 +67,13 @@ const styles = {
     },
     emoji: {
         fontSize: '70px'
+    },
+    loadingHolder: {
+        minHeight: '300px',
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 };
 

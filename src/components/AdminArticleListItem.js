@@ -8,7 +8,7 @@ import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 
 import HtmlContent from './HtmlContent';
 import EditControls from './EditControls';
-import { types } from '../data';
+import { pageTypes as types } from '../data';
 
 class AdminArticleListItem extends PureComponent {
     state = {

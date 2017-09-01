@@ -6,6 +6,8 @@ import IconButton from 'material-ui/IconButton';
 import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 
+import { adLocations as locations } from '../data';
+
 import EditControls from './EditControls';
 
 class AdminArticleListItem extends PureComponent {
@@ -14,12 +16,6 @@ class AdminArticleListItem extends PureComponent {
     }
 
     toggleOpen = () => this.setState(({ open }) => ({ open: !open }));
-
-    locations = [
-        { value: 'banner', text: 'Banner' },
-        { value: 'sidebar', text: 'Barra Lateral' },
-        { value: 'highlights', text: 'Destaques da Página Inicial' }
-    ]    
 
     render = () => {
         const {
@@ -33,6 +29,8 @@ class AdminArticleListItem extends PureComponent {
             open
         } = this.state;
 
+        const { width, height } = locations.find(l => l.value === data.get('location', 'sidebar'));
+
         return (
             <div className={classes.holder}>
                 <div className={classes.header}>
@@ -40,8 +38,8 @@ class AdminArticleListItem extends PureComponent {
                         <h1 className={classes.title}>
                             {data.get('name')}
                         </h1>
-                        <h4>{this.locations.filter(l => l.value === data.get('location', 'sidebar')).text}</h4>
-                        <small>{data.get('link')}</small>
+                        <strong>{locations.filter(l => l.value === data.get('location', 'sidebar')).text}</strong>
+                        <small><a target="_blank" href={data.get('link')}>{data.get('link')}</a></small>
                     </div>
                     <div className={classes.actions}>
                         <IconButton onTouchTap={this.toggleOpen}>
@@ -56,8 +54,21 @@ class AdminArticleListItem extends PureComponent {
                 </div>
                 {
                     open && (
-                        <div>
-                            <img src={data.getIn(['image', 'url'])} alt={data.get('name')} />
+                        <div
+                            className={classes.bannerHolder}
+                            style={{
+                                height: `${height * 1.1}px`
+                            }}
+                        >
+                            <div
+                                className={classes.bannerSample}
+                                style={{
+                                    width,
+                                    height,
+                                    backgroundImage: `url(${data.getIn(['image', 'url'])})`
+                                }}
+                            >
+                            </div>
                         </div>
                     )
                 }
@@ -87,9 +98,16 @@ export default jss({
         flexDirection: 'row',
         justifyContent: 'flex-start'
     },
-    content: {
-        padding: '15px',
-        backgroundColor: '#FFF',
-        border: '1px solid rgba(200, 200, 200, 1)'
+    bannerHolder: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    bannerSample: {
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        backgroundColor: '#000'
     }
 })(AdminArticleListItem);

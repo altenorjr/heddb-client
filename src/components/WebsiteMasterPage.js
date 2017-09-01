@@ -6,7 +6,11 @@ import TopBar from './TopBar';
 import Holder from './Holder';
 import Panel from './Panel';
 
+import { getAds } from '../redux/Ads';
+
 class WebsiteMasterPage extends PureComponent {
+    componentDidMount = () => this.props.getAds();
+
     render = () => {
         const { 
             children, 
@@ -52,7 +56,10 @@ WebsiteMasterPage = jss({
 })(WebsiteMasterPage);
 
 const mapStateToProps = (state) => ({
-    loading: state.getIn(['events', 'loading']) || state.getIn(['bands', 'loading']) || state.getIn(['venues', 'loading']) || state.getIn(['articles', 'loading']) || false
-})
+    loading: state.getIn(['events', 'loading']) || state.getIn(['bands', 'loading']) || state.getIn(['venues', 'loading']) || state.getIn(['articles', 'loading']) || false,
+    adsLoading: state.getIn(['ads', 'loading'])
+});
 
-export default connect(mapStateToProps)(WebsiteMasterPage);
+const mapDispatchToProps = { getAds };
+
+export default connect(mapStateToProps, mapDispatchToProps)(WebsiteMasterPage);
