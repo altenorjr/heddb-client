@@ -99,7 +99,7 @@ class Calendar extends Component {
             >
                 {
                     loading && (
-                        <RefreshIndicator top={350} left={(window.innerWidth / 2) - 20} status="loading" />
+                        <RefreshIndicator top={250} left={(window.innerWidth / 2) - 20} status="loading" />
                     )
                 }
                 <div className={classes.content}>

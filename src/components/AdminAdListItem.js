@@ -38,7 +38,7 @@ class AdminArticleListItem extends PureComponent {
                         <h1 className={classes.title}>
                             {data.get('name')}
                         </h1>
-                        <strong>{locations.filter(l => l.value === data.get('location', 'sidebar')).text}</strong>
+                        <strong>{locations.find(l => l.value === data.get('location', 'sidebar')).text}</strong><br />
                         <small><a target="_blank" href={data.get('link')}>{data.get('link')}</a></small>
                     </div>
                     <div className={classes.actions}>

@@ -65,12 +65,12 @@ const types = (state = new List(), { type, metadata }) => {
 const loading = (state = false, { type }) => {
     switch (type) {
         case result.GET_RECORDS_START:
-        case result.SAVE_RECORDS_START:
+        case result.SAVE_RECORD_START:
         case GET_LINK_START:
         case GET_LIST_START:
         return true;
         case result.GET_RECORDS_SUCCESS:
-        case result.SAVE_RECORDS_SUCCESS:
+        case result.SAVE_RECORD_SUCCESS:
         case GET_LINK_SUCCESS:
         case GET_LIST_SUCCESS:
             return false;

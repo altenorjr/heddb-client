@@ -1,20 +1,24 @@
 import React from 'react';
 import jss from 'react-jss';
 import { SocialIcon } from 'react-social-icons';
-import { Map, List } from 'immutable';
+import { List } from 'immutable';
 
 import EditControls from './EditControls';
 
 const Band = ({
     classes,
     width = '100%',
-    data = new Map(),
+    data,
     showState = false,
     showEditControls = false,
     showStateInformation = false,
     requestEdition,
     requestDeletion
 }) => {
+    if (!data) {
+        return <div />
+    }
+
     return (
         <div className={classes.band}>
             <div className={classes.left}>
@@ -27,7 +31,7 @@ const Band = ({
                 <p className={classes.bio}>{data.get('bio', '')}</p>
                 <div className={classes.links}>
                     {
-                        data.get('social', new List()).map((link, i) => (
+                        data.get('social') && data.get('social', new List()).map((link, i) => (
                             <SocialIcon
                                 key={i}
                                 url={link}

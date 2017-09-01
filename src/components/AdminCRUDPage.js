@@ -26,6 +26,7 @@ class AdminCRUDPageUgly extends PureComponent {
         const {
             title,
             editor,
+            editorOpen,
             className,
             contentClassName,
             editorWidth,
@@ -39,7 +40,7 @@ class AdminCRUDPageUgly extends PureComponent {
                 onRightIconClick={() => this.props.onRequestAdd()}
             >
                 <Drawer
-                    open={this.props.editorOpen}
+                    open={editorOpen}
                     docked={false}
                     openSecondary={true}
                     width={editorWidth}

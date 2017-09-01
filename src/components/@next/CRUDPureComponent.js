@@ -32,13 +32,14 @@ export default (name, Container, ListItem, Editor, Filters, loadFunction, loadPa
         requestEdition = (item) => this.props.requestEdition(item);
         requestDeletion = (item) => this.props.requestDeletion(item);
 
-        save = (objectId, data) => this.props.saveRecord(objectId, data)
-            .then(() => this.props.requestEdition(null))
+        save = (objectId, data) => this.props.requestEdition(null)
+            .then(() => this.props.saveRecord(objectId, data))
             .then(() => this.props[loadFunction](loadParams));
 
-        delete = (id) => this.props.deleteRecord(id)
-            .then(() => this.props.requestDeletion(null))
-            .then(() => this.props[loadFunction](loadParams));
+        delete = (id) => this.props.requestDeletion(null)
+            .then(() => this.props.deleteRecord(id))
+            .then(() => this.props[loadFunction](loadParams))
+            .catch(console.warn);
 
         renderEditor = () => {
             return (

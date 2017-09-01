@@ -14,7 +14,7 @@ module.exports = (parseClassName, { convert, reducers = {}, actions = {} }) => {
 
     exports.GET_RECORDS_START = `@client/${classLC}/GET_${classUC}_START`
     exports.GET_RECORDS_SUCCESS = `@client/${classLC}/GET_${classUC}_SUCCESS`
-    exports.SAVE_RECORDS_START = `@client/${classLC}/SAVE_${classUC}_START`;
+    exports.SAVE_RECORD_START = `@client/${classLC}/SAVE_${classUC}_START`;
     exports.SAVE_RECORD_SUCCESS = `@client/${classLC}/SAVE_${classUC}_SUCCESS`;
     exports.SET_EDITING_ITEM = `@client/${classLC}/SET_EDITING_${classUC}`;
     exports.SET_DELETING_ITEM = `@client/${classLC}/SET_DELETING_${classUC}`;
@@ -29,7 +29,7 @@ module.exports = (parseClassName, { convert, reducers = {}, actions = {} }) => {
     }
 
     exports.saveRecord = (objectId, state) => (dispatch) => {
-        dispatch({ type: exports.SAVE_RECORDS_START });
+        dispatch({ type: exports.SAVE_RECORD_START });
 
         if (!objectId) {
             return convert(new Class(), state)
@@ -44,13 +44,14 @@ module.exports = (parseClassName, { convert, reducers = {}, actions = {} }) => {
         }
     }
 
-    exports.requestEdition = (item) => (dispatch) => dispatch({ type: exports.SET_EDITING_ITEM, item });
-    exports.requestDeletion = (item) => (dispatch) => dispatch({ type: exports.SET_DELETING_ITEM, item });
+    exports.requestEdition = (item) => (dispatch) => Promise.resolve(dispatch({ type: exports.SET_EDITING_ITEM, item }));
+    exports.requestDeletion = (item) => (dispatch) => Promise.resolve(dispatch({ type: exports.SET_DELETING_ITEM, item }));
     exports.deleteRecord = (id) => (dispatch) => {
-        dispatch({ type: exports.SAVE_RECORDS_START })
+        dispatch({ type: exports.SAVE_RECORD_START })
         
-        remove(Class, id)
-            .then(() => dispatch({ type: exports.SAVE_RECORDS_SUCCESS }));
+        return remove(Class, id)
+            .then((r) => Promise.all([r, dispatch({ type: exports.SAVE_RECORD_SUCCESS })]))
+            .then(([r]) => r)
     }
 
     const data = (state = new List(), { type, data }) => {
@@ -65,10 +66,10 @@ module.exports = (parseClassName, { convert, reducers = {}, actions = {} }) => {
     const loading = (state = false, { type }) => {
         switch (type) {
             case exports.GET_RECORDS_START:
-            case exports.SAVE_RECORDS_START:
+            case exports.SAVE_RECORD_START:
                 return true;
             case exports.GET_RECORDS_SUCCESS:
-            case exports.SAVE_RECORDS_SUCCESS:
+            case exports.SAVE_RECORD_SUCCESS:
                 return false;
             default:
                 return state;
