@@ -89,6 +89,8 @@ Home = jss({
     },
     sidebar: {
         marginLeft: '15px'
+        // position: 'sticky',
+        // top: '274px'
     }
 })(Home);
 

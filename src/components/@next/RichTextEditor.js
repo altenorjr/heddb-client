@@ -56,7 +56,9 @@ class RichTextEditor extends PureComponent {
 
 export default jss({
     editor: {
-        height: '10vw'
+        height: '25vw',
+        border: '1px solid #DDD',
+        padding: '5px'
     }
 })(RichTextEditor);
 

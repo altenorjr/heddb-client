@@ -13,7 +13,8 @@ export default (name, reduxPath, Container, behaviour = {}) => {
     const {
         validate = () => false,
         renderContent = () => <div />,
-        updateStateValue = defaultUpdateStateValue
+        updateStateValue = defaultUpdateStateValue,
+        componentDidMount = () => {}
     } = behaviour;
 
     class CRUDEditorPureComponent extends PureComponent {
@@ -32,6 +33,8 @@ export default (name, reduxPath, Container, behaviour = {}) => {
         updateStateValue = (path, value) => this.setState(updateStateValue(path, value, this.props));
 
         componentWillReceiveProps = (next) => this.setState({ data: next.data });
+
+        componentDidMount = () => componentDidMount.call(this)
 
         save = () => {
             if (!validate(this.props, this.state)) {

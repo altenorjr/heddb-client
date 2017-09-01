@@ -225,29 +225,30 @@ const updateStateValue = function (path, value, { bands }) {
     };
 }
 
-class AdminEventEditor extends CRUDEditorPureComponent('Evento', 'events', AdminCrudEditor, {
-    validate,
-    renderContent,
-    updateStateValue
-}) {
-    loadState = (props) => {
-        if (props.bands.length && props.venues.length) {
-            return this.setState({ loaded: true });
-        }
-    }
-
-    componentDidMount = () => {
-        this.loadState(this.props);
-
-        if (!this.props.bands.length) {
-            this.props.filterBands({}).then(() => this.loadState());
-        }
-
-        if (!this.props.venues.length) {
-            this.props.filterVenues().then(() => this.loadState());
-        }
+const loadState = function () {
+    if (this.props.bands.length && this.props.venues.length) {
+        return this.setState({ loaded: true });
     }
 }
+
+const componentDidMount = function () {
+    loadState.call(this);
+
+    if (!this.props.bands.length) {
+        this.props.filterBands({}).then(() => loadState.call(this));
+    }
+
+    if (!this.props.venues.length) {
+        this.props.filterVenues().then(() => loadState.call(this));
+    }
+};
+
+let AdminEventEditor = CRUDEditorPureComponent('Evento', 'events', AdminCrudEditor, {
+    validate,
+    renderContent,
+    updateStateValue,
+    componentDidMount
+});
 
 AdminEventEditor = jss({
     form: {

@@ -15,4 +15,4 @@ injectTapEventPlugin();
 
 Parse.initialize(process.env.REACT_APP_PARSE_SERVER_APPLICATION_ID);
 Parse.serverURL = process.env.REACT_APP_PARSE_SERVER_URL; 
-console.log(Parse.serverURL);
+// console.log(Parse.serverURL);
