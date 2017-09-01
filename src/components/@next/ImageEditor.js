@@ -10,7 +10,7 @@ import ClearIcon from 'material-ui/svg-icons/action/delete';
 
 class ImageEditor extends PureComponent {
     static propTypes = {
-        title: PropTypes.string.isRequired,
+        title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
         image: PropTypes.string.isRequired,
         onChange: PropTypes.func.isRequired,
         accept: PropTypes.string,

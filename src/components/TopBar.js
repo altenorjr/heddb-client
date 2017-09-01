@@ -83,7 +83,10 @@ const styles = {
     },
     sliderItem: {
         width: '100%',
-        textAlign: 'right',
+        height: '124px',
+        display: 'flex !important',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
         '& img': {
             display: 'inline'
         }

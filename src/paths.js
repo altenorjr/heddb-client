@@ -8,6 +8,7 @@ import AdminVenues from './components/AdminVenues';
 import AdminBands from './components/AdminBands'; 
 import AdminEvents from './components/AdminEvents'; 
 import AdminArticles from './components/AdminArticles';
+import AdminAds from './components/AdminAds';
 
 export const adminPaths = [
     {
@@ -24,8 +25,12 @@ export const adminPaths = [
         component: AdminEvents
     }, {
         path: '/admin/artigos',
-        name: 'Artigos',
+        name: 'Artigos e Páginas',
         component: AdminArticles
+    }, {
+        path: '/admin/anúncios',
+        name: 'Anúncios',
+        component: AdminAds
     }
 ];
 
