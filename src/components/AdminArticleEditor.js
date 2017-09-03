@@ -9,12 +9,7 @@ import CRUDEditorPureComponent from './@next/CRUDEditorPureComponent';
 
 import AdminCrudEditor from './AdminCRUDEditor';
 
-const types = [
-    { value: 'article', text: 'Artigos', baseLink: 'artigos' },
-    { value: 'about', text: 'Sobre', baseLink: 'paginas' },
-    { value: 'donations', text: 'Doações', baseLink: 'paginas' },
-    { value: 'contact', text: 'Contato', baseLink: 'paginas' }
-];
+import { pageTypes as types } from '../data';
 
 const validate = (props, { data }) => {
     const
@@ -33,15 +28,7 @@ const validate = (props, { data }) => {
 const updateStateValue = (path, value) => ({ data }) => {
     let newData = data.setIn(path, value);
 
-    let nameChanged = false;
-
-    if (path[0] === 'type' && value !== 'article') {
-        newData = newData.set('name', types.find(t => t.value === value).text);
-
-        nameChanged = true;
-    }
-
-    if (path[0] === 'name' || nameChanged) {
+    if (path[0] === 'name') {
         const name = newData.get('name');
 
         newData = newData.set('link', name.toLowerCase().replace(/[.,/#!$%^&*;:{}=\\_`~()]/g,"").replace(/\s/g, '-'));
@@ -76,7 +63,6 @@ const renderContent = function ({ classes }, { data }) {
             </SelectField>
             <TextField
                 floatingLabelText="Nome *"
-                readOnly={data.get('type', 'article') !== 'article'}
                 value={data.get('name', '')}
                 onChange={(e) => this.updateStateValue(['name'], e.target.value)}
                 floatingLabelFixed
@@ -87,7 +73,6 @@ const renderContent = function ({ classes }, { data }) {
                 value={data.get('link', '')}
                 onChange={(e) => this.updateStateValue(['link'], e.target.value)}
                 floatingLabelFixed
-                readOnly
                 fullWidth
             />
             <RichTextEditor

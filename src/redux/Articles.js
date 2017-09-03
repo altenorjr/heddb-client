@@ -56,7 +56,7 @@ const list = (state = null, { type, data }) => {
 const types = (state = new List(), { type, metadata }) => {
     switch (type) {
         case result.GET_RECORDS_SUCCESS:
-            return metadata.types;
+            return metadata.types || state;
         default:
             return state;
     }
@@ -83,7 +83,7 @@ const selectType = (selectedType, forceFilter = true) => (dispatch, getState) =>
     dispatch({ type: SET_FILTER_TYPE, selectedType });
 
     if (forceFilter) {
-        filterArticles({ selectedType })(dispatch, getState);
+        filterArticles({ type: selectedType })(dispatch, getState);
     }
 }
 
@@ -91,35 +91,37 @@ const filterArticles = (filters = {}) => (dispatch, getState) => {
     dispatch({ type: result.GET_RECORDS_START });
 
     const {
-        type = 'all',
-        loadMetadata = true
+        type = 'all'
     } = filters
 
     const componentState = getState();
 
     const selectedType = type || componentState.getIn(['articles', 'selectedType']) || 'all'
 
-    const hasTypes = !!componentState.getIn(['articles', 'types']);
+    const hasTypes = !!componentState.getIn(['articles', 'types'], new List()).size;
 
-    const shouldLoadMetadata = typeof loadMetadata === 'boolean' ? loadMetadata : !hasTypes;
+    const shouldLoadMetadata = !hasTypes;
 
     return Parse.Cloud.run('filterArticles', {
         type: selectedType,
         shouldLoadMetadata
     })
         .then(({ articles, types }) => {
+            articles = articles.map(article => article.toJSON());
+
             const action = {
                 type: result.GET_RECORDS_SUCCESS,
-                data: fromJS(articles.map(article => article.toJSON())),
+                data: fromJS(articles),
                 metadata: {}
             }
 
             if (shouldLoadMetadata) {
-                action.metadata.types = types;
+                action.metadata.types = fromJS(types);
             }
 
             dispatch(action);
         })
+        .catch(e => console.warn(e))
 }
 
 const findArticleByLink = (link) => (dispatch, getState) => {
@@ -145,7 +147,7 @@ const getList = () => (dispatch, getState) => {
     Parse.Cloud.run('getArticleList')
         .then((result) => dispatch({
             type: GET_LIST_SUCCESS,
-            data: result
+            data: fromJS(result)
         }))
 }
 

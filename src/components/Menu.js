@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import jss from 'react-jss';
 import cx from 'classnames';
 import { NavLink } from 'react-router-dom';
@@ -20,19 +21,19 @@ class Menu extends PureComponent {
         const {
             classes,
             articles,
-            metadata
+            pages
         } = this.props;
 
         return (
             <Holder className={classes.menuHolder}>
                 <Panel className={cx(classes.menu, "accent-font")} element="ul">
                     <li className={classes.menuItem}>
-                        <NavLink 
-                            to="/" 
-                            data-role="link" 
-                            className={classes.link} 
+                        <NavLink
+                            to="/"
+                            data-role="link"
+                            className={classes.link}
                             activeClassName={classes.activeLink}
-                            exact 
+                            exact
                         >
                             Início
                         </NavLink>
@@ -40,12 +41,12 @@ class Menu extends PureComponent {
                     {
                         websitePaths.filter(path => !path.virtual).map(({ path, name }, i) => (
                             <li key={i} className={classes.menuItem}>
-                                <NavLink 
-                                    to={path} 
-                                    data-role="link" 
-                                    className={classes.link} 
+                                <NavLink
+                                    to={path}
+                                    data-role="link"
+                                    className={classes.link}
                                     activeClassName={classes.activeLink}
-                                    exact 
+                                    exact
                                 >
                                     {name}
                                 </NavLink>
@@ -64,17 +65,17 @@ class Menu extends PureComponent {
                         >
                             <ul className={classes.items}>
                                 {
-                                    articles.map(({ name, link }, i) => (
+                                    articles.map((page, i) => (
                                         <li
                                             className={cx(classes.item, classes.li)}
                                             key={i}
                                         >
                                             <NavLink
-                                                to={link}
+                                                to={page.get('link')}
                                                 className={classes.link}
                                                 activeClassName={classes.activeLink}
                                             >
-                                                {name}
+                                                {page.get('name')}
                                             </NavLink>
                                         </li>
                                     ))
@@ -82,39 +83,21 @@ class Menu extends PureComponent {
                             </ul>
                         </Popover>
                     </li>
-                    <li className={classes.menuItem}>
-                        <NavLink
-                            to={metadata.about.link || '/paginas/sobre'}
-                            data-role="link"
-                            className={classes.link}
-                            activeClassName={classes.activeLink}
-                            exact
-                        >
-                            {metadata.about.name || 'Sobre'}
-                        </NavLink>
-                    </li>
-                    <li className={classes.menuItem}>
-                        <NavLink
-                            to={metadata.donations.link || '/paginas/doações'}
-                            data-role="link"
-                            className={classes.link}
-                            activeClassName={classes.activeLink}
-                            exact
-                        >
-                            {metadata.donations.name || 'Doações'}
-                        </NavLink>
-                    </li>
-                    <li className={classes.menuItem}>
-                        <NavLink
-                            to={metadata.contact.link || '/paginas/contato'}
-                            data-role="link"
-                            className={classes.link}
-                            activeClassName={classes.activeLink}
-                            exact
-                        >
-                            {metadata.contact.name || 'Contato'}
-                        </NavLink>
-                    </li>
+                    {
+                        pages.map((page, i) => console.log(page.get('link')) || (
+                            <li key={page.get('link', i)} className={classes.menuItem} >
+                                <NavLink
+                                    to={page.get('link')}
+                                    data-role="link"
+                                    className={classes.link}
+                                    activeClassName={classes.activeLink}
+                                    exact
+                                >
+                                    {page.get('name')}
+                                </NavLink>
+                            </li>
+                        ))
+                    }
                 </Panel>
             </Holder>
         );
@@ -188,16 +171,8 @@ Menu = jss({
 })(Menu);
 
 const mapStateToProps = (state) => ({
-    articles: (state.getIn(['articles', 'list']) || {}).article || [],
-    metadata: (() => {
-        const { about, donations, contact } = state.getIn(['articles', 'list']) || {};
-
-        return {
-            about: about || {},
-            donations: donations || {},
-            contact: contact || {}
-        };
-    })(),
+    articles: state.getIn(['articles', 'list', 'article'], new List()),
+    pages: state.getIn(['articles', 'list', 'page'], new List()),
     loading: state.getIn(['articles', 'loading'], false),
 });
 

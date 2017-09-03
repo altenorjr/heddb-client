@@ -1,8 +1,6 @@
 export const pageTypes = [
-    { value: 'article', text: 'Artigos', baseLink: 'artigos' },
-    { value: 'about', text: 'Sobre', baseLink: 'paginas' },
-    { value: 'donations', text: 'Doações', baseLink: 'paginas' },
-    { value: 'contact', text: 'Contato', baseLink: 'paginas' }
+    { value: 'article', text: 'Artigo', baseLink: 'artigos' },
+    { value: 'page', text: 'Página', baseLink: 'paginas' }
 ];
 
 export const adLocations = [
