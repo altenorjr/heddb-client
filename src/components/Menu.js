@@ -84,7 +84,7 @@ class Menu extends PureComponent {
                         </Popover>
                     </li>
                     {
-                        pages.map((page, i) => console.log(page.get('link')) || (
+                        pages.map((page, i) => (
                             <li key={page.get('link', i)} className={classes.menuItem} >
                                 <NavLink
                                     to={page.get('link')}

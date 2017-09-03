@@ -47,6 +47,11 @@ class Page extends PureComponent {
         return (
             <Holder>
                 <Panel>
+                    {
+                        (data.type === 'article') && (
+                            <h1 className={classes.title}>{data.name}</h1>
+                        )
+                    }
                     <HtmlContent className={classes.content} content={data.content} />
                 </Panel>
             </Holder>
@@ -60,7 +65,7 @@ Page = jss({
         width: '100%',
         backgroundColor: 'rgba(255, 255, 255, .85)',
         position: 'sticky',
-        top: '199px'
+        top: '198px'
     },
     content: {
         width: '100%'
