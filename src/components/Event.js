@@ -6,6 +6,10 @@ import { List } from 'immutable';
 
 import padLeft from 'sugar/string/padLeft';
 
+import breakpoint from '../breakpoint';
+
+import { phonePortrait } from 'breakpoints-json';
+
 import EditControls from './EditControls';
 
 const getName = (type) => ({
@@ -28,34 +32,36 @@ const Event = ({
 }) => {
     return (
         <div className={classes.eventHolder}>
-            <div className={classes.left}>
-                <div className={classes.date}>
-                    {padLeft(moment(data.getIn(['date', 'iso'], '')).format('DD').toString(), 2, '0')}
-                    {showMonth && ('/' + moment(data.getIn(['date', 'iso'], '')).format('MM'))}
+            <div className={classes.boxes}>
+                <div className={classes.left}>
+                    <div className={classes.date}>
+                        {padLeft(moment(data.getIn(['date', 'iso'], '')).format('DD').toString(), 2, '0')}
+                        {showMonth && ('/' + moment(data.getIn(['date', 'iso'], '')).format('MM'))}
+                        {
+                            showHour && (
+                                <span className={classes.hour}>{moment(data.getIn(['date', 'iso'], '')).format('HH[h]mm[min]')}</span>
+                            )
+                        }
+                        {
+                            fromNow && (
+                                <small className={classes.fromNow}>{moment(data.getIn(['date', 'iso'], '')).fromNow()}</small>
+                            )
+                        }
+                    </div>
                     {
-                        showHour && (
-                            <span className={classes.hour}>{moment(data.getIn(['date', 'iso'], '')).format('HH[h]mm[min]')}</span>
-                        )
-                    }
-                    {
-                        fromNow && (
-                            <small className={classes.fromNow}>{moment(data.getIn(['date', 'iso'], '')).fromNow()}</small>
+                        !!((data.get('social') || new List()).size) && (
+                            <div className={classes.social}>
+                                {
+                                    data.get('social', new List()).map((link, i) => (
+                                        <SocialIcon key={i} url={link} className={classes.socialIcon} />
+                                    ))
+                                }
+                            </div>
                         )
                     }
                 </div>
-                {
-                    !!((data.get('social') || new List()).size) && (
-                        <div className={classes.social}>
-                            {
-                                data.get('social', new List()).map((link, i) => (
-                                    <SocialIcon key={i} url={link} className={classes.socialIcon} />
-                                ))
-                            }
-                        </div>
-                    )
-                }
+                <div className={classes.pic} style={{ backgroundImage: `url(${data.getIn(['pic', 'url']) || data.getIn(['bands', 0, 'pic', 'url'])})` }} />
             </div>
-            <div className={classes.pic} style={{ backgroundImage: `url(${data.getIn(['pic', 'url']) || data.getIn(['bands', 0, 'pic', 'url'])})` }} />
             <div className={classes.details}>
                 <div className={classes.event}>
                     {
@@ -77,8 +83,8 @@ const Event = ({
                     {
                         data.getIn(['venue', 'phone'], false) && (
                             <div>
-                                <a 
-                                    className={classes.phone} 
+                                <a
+                                    className={classes.phone}
                                     href={`tel:+55${data.getIn(['venue', 'phone'], '').replace(/[^0-9]/gi, '')}`}
                                 >
                                     {data.getIn(['venue', 'phone'], '')}
@@ -113,8 +119,14 @@ const styles = {
         height: ({ mini }) => mini ? '185px' : '275px',
         // boxShadow: '0px 0px 20px rgba(127, 127, 127, 0.5)',
         minWidth: '650px',
-        '@media (max-width: 1366px)': {
-            minWidth: '100%'
+        // flexWrap: 'wrap',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            minWidth: '100vw',
+            width: '100vw',
+            height: 'auto !important',
+        },
+        [`@media (max-width: ${phonePortrait.max}px)`]: {
+            flexDirection: 'column'
         }
     },
     type: {
@@ -122,6 +134,37 @@ const styles = {
         color: '#7C1808',
         fontWeight: 900
     },
+    boxes: {
+        order: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            order: 1,
+        },
+        [`@media (max-width: ${phonePortrait.max}px)`]: {
+            width: '100%',
+            order: 0
+        }
+    },
+    details: {
+        order: 1,
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        flexBasis: '450px',
+        height: 'auto',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            marginTop: '15px',
+            order: 0,
+            flexBasis: 'unset'
+        },
+        [`@media (max-width: ${phonePortrait.max}px)`]: {
+            width: '100%',
+            order: 1
+        }
+    },    
     left: {
         height: '100%',
         display: 'flex',
@@ -162,14 +205,6 @@ const styles = {
         backgroundPosition: 'center',
         margin: '0 10px 0 10px',
         backgroundColor: '#000'
-    },
-    details: {
-        flex: 1,
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'stretch'
     },
     event: {
         flex: 1

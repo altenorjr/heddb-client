@@ -1,20 +1,29 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import jss from 'react-jss';
+import breakpoint from '../breakpoint';
 
 import TopBar from './TopBar';
 import Holder from './Holder';
 import Panel from './Panel';
 
 import { getAds } from '../redux/Ads';
+import withDimensions from './hoc/withDimensions';
+import { updateDimensions } from '../redux/dimensions';
 
 class WebsiteMasterPage extends PureComponent {
-    componentDidMount = () => this.props.getAds();
+    componentWillMount = () => this.props.getAds();
+
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps.dimensions.width !== this.props.dimensions.width) {
+            this.props.updateDimensions(nextProps.dimensions);
+        }
+    }
 
     render = () => {
-        const { 
-            children, 
-            classes, 
+        const {
+            children,
+            classes,
             loading
         } = this.props;
 
@@ -40,9 +49,12 @@ class WebsiteMasterPage extends PureComponent {
     }
 }
 
-WebsiteMasterPage = jss({
+WebsiteMasterPage = withDimensions(jss({
     body: {
-        paddingTop: '199px'
+        paddingTop: '199px',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            paddingTop: '100px'
+        }
     },
     curadoria: {
         fontSize: '12px',
@@ -52,14 +64,25 @@ WebsiteMasterPage = jss({
         '& a': {
             color: '#5A9CF2'
         }
+    },
+    bannerHolder: {
+        width: '100%',
+        backgroundColor: '#000',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'   
     }
-})(WebsiteMasterPage);
+})(WebsiteMasterPage));
 
 const mapStateToProps = (state) => ({
     loading: state.getIn(['events', 'loading']) || state.getIn(['bands', 'loading']) || state.getIn(['venues', 'loading']) || state.getIn(['articles', 'loading']) || false,
-    adsLoading: state.getIn(['ads', 'loading'])
+    adsLoading: state.getIn(['ads', 'loading']),
+    width: state.getIn(['dimensions', 'width'])
 });
 
-const mapDispatchToProps = { getAds };
+const mapDispatchToProps = { 
+    getAds,
+    updateDimensions
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(WebsiteMasterPage);

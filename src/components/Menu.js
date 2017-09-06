@@ -10,6 +10,8 @@ import Holder from './Holder';
 import Popover from './Popover';
 import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 
+import breakpoint from '../breakpoint';
+
 import { getList } from '../redux/Articles';
 
 import { websitePaths } from '../paths';
@@ -107,7 +109,10 @@ class Menu extends PureComponent {
 Menu = jss({
     menuHolder: {
         background: 'rgba(255, 255, 255, .9)',
-        zIndex: 10
+        zIndex: 10,
+        [`@media (max-width: ${breakpoint}px)`]: {
+            // height: '100vh'
+        }
     },
     menu: {
         borderBottom: '1px solid #CCC',
@@ -118,7 +123,13 @@ Menu = jss({
         alignItems: 'center',
         listStyle: 'none',
         padding: 0,
-        margin: 0
+        margin: 0,
+        [`@media (max-width: ${breakpoint}px)`]: {
+            flexDirection: 'column',
+            height: 'auto',
+            justifyContent: 'flex-start',
+            borderBottom: 0
+        }
     },
     menuItem: {
         textAlign: 'center',
@@ -159,7 +170,10 @@ Menu = jss({
         display: 'flex',
         alignItems: 'center',
         padding: '10px',
-        width: '350px'
+        width: '350px',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            width: '100%'
+        }
     },
     li: {
         paddingLeft: '30px',

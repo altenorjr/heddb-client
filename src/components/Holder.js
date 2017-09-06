@@ -1,6 +1,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import cx from 'classnames';
+import breakpoint from '../breakpoint';
 
 const Holder = ({ children, classes, sheet, className, ...rest }) => (
     <div className={cx(classes.holder, className)} {...rest}>
@@ -13,7 +14,10 @@ const styles = {
         width: '100vw',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            width: '100%'
+        }
     }
 };
 

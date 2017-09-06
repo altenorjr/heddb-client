@@ -52,7 +52,7 @@ class Home extends PureComponent {
                         </div>
                         <SidebarPublicityZone className={classes.sidebar} />
                     </div>
-                    <h1>Destaques</h1>
+                    <h1 className={classes.title}>Destaques</h1>
                     <div className={classes.highlightsHolder}>
                         <HighlightsPublicityZone />
                     </div>
@@ -67,7 +67,10 @@ Home = jss({
 
     },
     title: {
-        margin: '15px 0'
+        padding: '15px',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     },
     bodyHolder: {
         width: '100%',

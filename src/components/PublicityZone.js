@@ -5,7 +5,8 @@ import cx from 'classnames';
 import Slider from 'react-slick';
 import { List } from 'immutable';
 
-import { adLocations } from '../data';
+import { desktop } from 'breakpoints-json';
+import breakpoint from '../breakpoint';
 
 export default (type) => {
     let PublicityZone = (props) => {
@@ -18,11 +19,16 @@ export default (type) => {
             items = new List()
         } = props;
 
-        if (!items.size) {
-            return <div />
-        }
+        let { min, max } = desktop;
 
-        const { width, height } = adLocations.find(l => l.value === type);
+        min = parseInt(min, 10);
+        max = parseInt(max, 10);
+
+        const sidebarBreakpoint = min + ((max - min) / 2);
+
+        if (!items.size || (type === 'sidebar' && props.width < sidebarBreakpoint)) {
+            return (<div />);
+        }
 
         return (
             <Slider
@@ -43,9 +49,7 @@ export default (type) => {
                             rel="noopener noreferrer"
                             className={cx(classes.sliderItem, itemClassName)}
                             style={{
-                                backgroundImage: `url(${item.getIn(['image', 'url'])})`,
-                                width: `${width}px`,
-                                height: `${height}px`
+                                backgroundImage: `url(${item.getIn(['image', 'url'])})`
                             }}
                         >&nbsp;</a>
                     ))
@@ -61,27 +65,67 @@ export default (type) => {
             backgroundColor: '#000',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
-            backgroundSize: 'contain'
+            backgroundSize: 'contain',
+            width: '100%',
+            height: '100%'
         },
         banner: {
             width: '500px',
             height: '124px',
-            '& .slick-list': { height: '124px' }
+            '& .slick-track': {
+                height: '124px',
+                [`@media (max-width: ${breakpoint}px)`]: {
+                    height: '100px'
+                }
+            },
+            '& .slick-list': {
+                height: '124px',
+                [`@media (max-width: ${breakpoint}px)`]: {
+                    height: '100px',
+                }
+            },
+            [`@media (max-width: ${breakpoint}px)`]: {
+                width: '100%',
+                height: '100px'
+            }
         },
         sidebar: {
             width: '300px',
             height: '595px',
-            '& .slick-list': { height: '595px' }
+            '& .slick-list': {
+                height: '595px'
+            },
+            '& .slick-track': {
+                height: '595px'
+            }
         },
         highlights: {
             width: '900px',
             height: '400px',
-            '& .slick-list': { height: '400px' }
+            [`@media (max-width: ${breakpoint}px)`]: {
+                width: '100vw',
+                height: '44vw'
+            },
+            '& .slick-list': {
+                height: '400px',
+                [`@media (max-width: ${breakpoint}px)`]: {
+                    width: '100vw',
+                    height: '44vw'
+                }
+            },
+            '& .slick-track': {
+                height: '400px',
+                [`@media (max-width: ${breakpoint}px)`]: {
+                    width: '100vw',
+                    height: '44vw'
+                }
+            }
         }
     })(PublicityZone);
 
     const mapStateToProps = (state) => ({
-        items: state.getIn(['ads', type], new List())
+        items: state.getIn(['ads', type], new List()),
+        width: state.getIn(['dimensions', 'width'])
     });
 
     return connect(mapStateToProps)(PublicityZone);

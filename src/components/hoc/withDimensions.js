@@ -13,23 +13,10 @@ const withDimensions = (WrappedComponent) => (
         resize = () => this.update();
 
         componentWillMount = () => {
-            let running = false;
-
-            window.addEventListener("resize", () => {
-                if (running) { return; }
-                running = true;
-                requestAnimationFrame(() => {
-                    window.dispatchEvent(new CustomEvent("optimizedResize"));
-                    running = false;
-                });
-            });
-
-            window.addEventListener("optimizedResize", this.update);
+            window.addEventListener("resize", () => this.update());
         }
 
-        componentDidMount = () => this.update()
-
-        componentWillUnmount = () => window.removeEventListener("optimizedResize", this.update);
+        componentWillUnmount = () => window.removeEventListener("resize", this.update);
 
         render() {
             const forwardProps = Object.assign({}, this.props);
