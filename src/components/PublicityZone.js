@@ -36,7 +36,7 @@ export default (type) => {
                 arrows={false}
                 dots={dots}
                 autoplay
-                slidesToShow={1}
+                slidesToShow={1} 
                 slidesToScroll={1}
                 autoplaySpeed={speed}
             >
