@@ -8,6 +8,7 @@
     "npm": "4.2.0"
   },
   "dependencies": {
+    "breakpoints-json": "^1.0.21",
     "classnames": "^2.2.5",
     "create-react-class": "^15.6.0",
     "draft-js": "^0.10.1",
@@ -41,7 +42,6 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@storybook/react": "^3.1.9",
     "dot-env": "0.0.1",
     "dotenv": "^4.0.0",
     "dotenv-save": "^1.2.0",
@@ -57,5 +57,9 @@
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "deploy": "git push heroku master"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/altenorjr/heddb-client.git",
+  "author": "Altenor Gonçalves <altenorjr@gmail.com>",
+  "license": "MIT"
 }
