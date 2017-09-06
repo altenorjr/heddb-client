@@ -139,7 +139,8 @@ Menu = jss({
     },
     articles: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#FFF'
     },
     link: {
         transform: 'scale(1)',

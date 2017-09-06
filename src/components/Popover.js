@@ -25,9 +25,9 @@ const Popover = jss({
     },
     popoverContent: {
         visibility: 'hidden',
-        opacity: 0,
+        opacity: 1,
         zIndex: -1,
-        transform: 'translateY(-2em)',
+        // transform: 'translateY(-2em)',
         position: 'absolute',
         top: '100%',
         width: ({ popoverWidth = '100%' }) => popoverWidth,

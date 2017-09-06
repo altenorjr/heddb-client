@@ -32,7 +32,7 @@ export default (type) => {
 
         return (
             <Slider
-                className={cx(className, classes[type])}
+                className={cx(className, classes.panel, classes[type])}
                 arrows={false}
                 dots={dots}
                 autoplay
@@ -59,6 +59,9 @@ export default (type) => {
     };
 
     PublicityZone = jss({
+        panel: {
+            backgroundColor: '#000'
+        },
         sliderItem: {
             display: 'block !important',
             overflow: 'hidden',

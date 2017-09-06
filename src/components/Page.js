@@ -8,6 +8,8 @@ import Holder from './Holder';
 import Panel from './Panel';
 import HtmlContent from './HtmlContent';
 
+import breakpoint from '../breakpoint';
+
 import { findArticleByLink } from '../redux/Articles';
 
 class Page extends PureComponent {
@@ -31,11 +33,11 @@ class Page extends PureComponent {
 
         if (loading) {
             return (
-                <RefreshIndicator 
-                    top={250} 
-                    left={(window.innerWidth / 2) - 20} 
-                    status="loading" 
-                    style={{ zIndex: 99999 }} 
+                <RefreshIndicator
+                    top={250}
+                    left={(window.innerWidth / 2) - 20}
+                    status="loading"
+                    style={{ zIndex: 99999 }}
                 />
             );
         }
@@ -65,10 +67,17 @@ Page = jss({
         width: '100%',
         backgroundColor: 'rgba(255, 255, 255, .85)',
         position: 'sticky',
-        top: '198px'
+        top: '198px',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            top: '100px',
+            padding: '15px'
+        }
     },
     content: {
-        width: '100%'
+        width: '100%',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            padding: '15px'
+        }
     }
 })(Page);
 

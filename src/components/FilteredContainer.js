@@ -6,11 +6,17 @@ import Holder from './Holder';
 import Panel from './Panel';
 import FilterPanel from './FilterPanel';
 
+import breakpoint from '../breakpoint';
+
 const FilteredContainer = jss({
     filterContainer: {
         position: 'fixed',
         top: '198px',
-        zIndex: 5
+        zIndex: 5,
+        [`@media (max-width: ${breakpoint}px)`]: {
+            position: 'static',
+            zIndex: 0
+        }
     },
     content: {
         paddingTop: ({ autoPadding = true }) => autoPadding ? '75px' : 0

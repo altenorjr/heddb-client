@@ -14,6 +14,8 @@ import { filterEvents, selectMonth, selectCity, selectType } from '../redux/Even
 
 import publicityZoneFactory from './PublicityZone';
 
+import breakpoint from '../breakpoint';
+
 const SidebarPublicityZone = publicityZoneFactory('sidebar');
 
 class Calendar extends Component {
@@ -76,7 +78,8 @@ class Calendar extends Component {
             selectedMonth,
             cities,
             selectedCity,
-            loading
+            loading,
+            width
         } = this.props;
 
         return (
@@ -108,6 +111,7 @@ class Calendar extends Component {
                         className={classes.events}
                         width="100%"
                         events={events}
+                        mini={width <= breakpoint}
                         showMonth={selectedMonth === 'all'}
                         fromNow={false}
                     />
@@ -144,6 +148,7 @@ const mapStateToProps = (state) => ({
     selectedCity: state.getIn(['events', 'selectedCity']),
     months: state.getIn(['events', 'months']),
     selectedMonth: state.getIn(['events', 'selectedMonth']),
+    width: state.getIn(['dimensions', 'width']),
     loading: state.getIn(['events', 'loading'], true)
 });
 
