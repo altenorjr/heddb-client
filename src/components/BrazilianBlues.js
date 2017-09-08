@@ -75,7 +75,7 @@ class BrazilianBlues extends PureComponent {
                     selectedState === 'all' && (
                         this.groupedBands().map(({ title, bands }, i) => (
                             <div key={i} className={cx(classes.bands, classes.all)}>
-                                <h1 className={classes.title}>{title}</h1>
+                                <h1 className={cx(classes.title, `nth-${i}`)}>{title}</h1>
                                 <Bands
                                     title={title}
                                     className={classes.bands}
@@ -121,9 +121,14 @@ BrazilianBlues = jss({
         zIndex: 6,
         pointerEvents: 'none',
         [`@media (max-width: ${breakpoint}px)`]: {
-            top: '147px',
+            top: '146px',
             backgroundColor: 'rgba(255, 255, 255, .85)',
             zIndex: 4
+        },
+        '&.nth-0': {
+            [`@media (max-width: ${breakpoint}px)`]: {
+                top: '147px'
+            }
         }
     }
 })(BrazilianBlues);
