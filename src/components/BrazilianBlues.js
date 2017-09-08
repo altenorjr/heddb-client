@@ -104,7 +104,10 @@ BrazilianBlues = jss({
         width: '100%'
     },
     all: {
-        marginTop: '-75px'
+        marginTop: '-75px',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            marginTop: 0
+        }
     },
     title: {
         display: 'flex',
