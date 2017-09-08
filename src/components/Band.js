@@ -3,6 +3,8 @@ import jss from 'react-jss';
 import { SocialIcon } from 'react-social-icons';
 import { List } from 'immutable';
 
+import breakpoint from '../breakpoint';
+
 import EditControls from './EditControls';
 
 const Band = ({
@@ -67,12 +69,15 @@ export default jss({
         display: 'flex',
         justifyContent: 'space-between',
         minWidth: '650px',
-        '@media (max-width: 1366px)': {
-            minWidth: '100%'
+        [`@media (max-width: ${breakpoint}px)`]: {
+            minWidth: '100%',
+            flexDirection: 'column'
         }
     },
     controls: {
-        backgroundColor: '#E5E5E5'
+        backgroundColor: '#E5E5E5',
+        order: 1,
+        flexDirection: 'row'
     },
     left: {
         padding: '20px',
@@ -82,6 +87,11 @@ export default jss({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'flex-start',
+        order: 0,
+        [`@media (max-width: ${breakpoint}px)`]: {
+            order: 3,
+            width: '100%'
+        }
     },
     name: {
         fontWeight: 300,
@@ -101,6 +111,12 @@ export default jss({
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        backgroundImage: ({ data }) => `url(${data.getIn(['pic', 'url'], '')})`
+        backgroundImage: ({ data }) => `url(${data.getIn(['pic', 'url'], '')})`,
+        order: 3,
+        [`@media (max-width: ${breakpoint}px)`]: {
+            order: 0,
+            width: '100vw',
+            height: '56vw'
+        }
     }
 })(Band);

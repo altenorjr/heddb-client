@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import jss from 'react-jss';
 import cx from 'classnames';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 
 import Panel from './Panel';
 import Holder from './Holder';
@@ -16,13 +16,18 @@ import { getList } from '../redux/Articles';
 
 import { websitePaths } from '../paths';
 
-class Menu extends PureComponent {
-    componentDidMount = this.props.getList()
+class Menu extends Component {
+    componentDidMount = this.props.getList();
+
+    shouldComponentUpdate = () => {
+        return true;
+    }
 
     render = () => {
         const {
             classes,
             articles,
+            onItemSelected = () => { },
             pages
         } = this.props;
 
@@ -31,6 +36,7 @@ class Menu extends PureComponent {
                 <Panel className={cx(classes.menu, "accent-font")} element="ul">
                     <li className={classes.menuItem}>
                         <NavLink
+                            onTouchTap={() => onItemSelected()}
                             to="/"
                             data-role="link"
                             className={classes.link}
@@ -44,6 +50,7 @@ class Menu extends PureComponent {
                         websitePaths.filter(path => !path.virtual).map(({ path, name }, i) => (
                             <li key={i} className={classes.menuItem}>
                                 <NavLink
+                                    onTouchTap={() => onItemSelected()}
                                     to={path}
                                     data-role="link"
                                     className={classes.link}
@@ -73,6 +80,7 @@ class Menu extends PureComponent {
                                             key={i}
                                         >
                                             <NavLink
+                                                onTouchTap={() => onItemSelected()}
                                                 to={page.get('link')}
                                                 className={classes.link}
                                                 activeClassName={classes.activeLink}
@@ -89,6 +97,7 @@ class Menu extends PureComponent {
                         pages.map((page, i) => (
                             <li key={page.get('link', i)} className={classes.menuItem} >
                                 <NavLink
+                                    onTouchTap={() => onItemSelected()}
                                     to={page.get('link')}
                                     data-role="link"
                                     className={classes.link}
@@ -183,7 +192,7 @@ Menu = jss({
             transform: 'scale(1.1)'
         }
     }
-})(Menu);
+})(withRouter(Menu));
 
 const mapStateToProps = (state) => ({
     articles: state.getIn(['articles', 'list', 'article'], new List()),

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { List } from 'immutable';
-import RefreshIndicator from 'material-ui/RefreshIndicator';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import Events from './Events';
 import DropDown from './DropDown';
@@ -94,18 +94,20 @@ class Calendar extends Component {
                     }),
                     this.createFilter({
                         items: cities,
-                        align: 'right',
+                        align: width > breakpoint ? 'right' : 'left',
                         selectedValue: selectedCity,
                         onSelectedValueChanged: this.selectedCityChanged
                     })
                 ]}
             >
-                {
-                    loading && (
-                        <RefreshIndicator top={250} left={(window.innerWidth / 2) - 20} status="loading" />
-                    )
-                }
                 <div className={classes.content}>
+                    {
+                        loading && (
+                            <div className={classes.loadingHolder}>
+                                <CircularProgress className={classes.loading} />
+                            </div>
+                        )
+                    }
                     <Events
                         loading={loading}
                         className={classes.events}
@@ -124,7 +126,10 @@ class Calendar extends Component {
 
 Calendar = jss({
     holder: {
-        position: 'relative'
+        position: 'relative',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            width: '100%'
+        }
     },
     content: {
         width: '100%',
@@ -133,12 +138,22 @@ Calendar = jss({
     },
     events: {
         flex: 1,
-        marginLeft: '5px'
+        marginLeft: '5px',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            marginLeft: '0px'
+        }
     },
     sidebar: {
         marginLeft: '15px',
         position: 'sticky',
         top: '274px'
+    },
+    loadingHolder: {
+        width: '100%',
+        height: '595px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })(Calendar);
 

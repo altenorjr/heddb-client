@@ -204,7 +204,10 @@ const styles = {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         margin: '0 10px 0 10px',
-        backgroundColor: '#000'
+        backgroundColor: '#000',
+        [`@media (max-width: ${phonePortrait.max}px)`]: {
+            margin: 0
+        }
     },
     event: {
         flex: 1

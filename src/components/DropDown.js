@@ -5,6 +5,8 @@ import cx from 'classnames';
 import { List } from 'immutable';
 import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 
+import breakpoint from '../breakpoint';
+
 import Popover from './Popover';
 import Badge from './Badge';
 
@@ -86,7 +88,8 @@ export default jss({
         backgroundColor: 'rgba(255, 255, 255, .95)'
     },
     selectedItemHolder: {
-        justifyContent: ({ align }) => align === 'center' ? 'center' : `flex-${align === 'left' ? 'start' : 'end'}`
+        justifyContent: ({ align }) => align === 'center' ? 'center' : `flex-${align === 'left' ? 'start' : 'end'}`,
+        backgroundColor: 'transparent !important'
     },
     selectedItem: {
         order: ({ align }) => align !== 'right' ? 0 : 1
@@ -98,7 +101,11 @@ export default jss({
         display: 'flex',
         alignItems: 'center',
         padding: '10px',
-        width: '350px'
+        width: '350px',
+        backgroundColor: 'rgba(255, 255, 255, .95)',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            width: '100%'
+        }
     },
     li: {
         paddingLeft: '30px',

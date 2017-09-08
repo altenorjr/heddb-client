@@ -59,7 +59,7 @@ WebsiteMasterPage = withDimensions(jss({
     curadoria: {
         fontSize: '12px',
         textAlign: 'center',
-        padding: '30px 0',
+        padding: '30px 15px',
         width: '100%',
         '& a': {
             color: '#5A9CF2'

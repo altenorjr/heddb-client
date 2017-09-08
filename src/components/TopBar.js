@@ -31,7 +31,7 @@ class TopBar extends PureComponent {
                     <Panel className={classes.mainContent}>
                         {
                             width <= breakpoint && (
-                                <IconButton 
+                                <IconButton
                                     className={classes.menuButton}
                                     onTouchTap={() => this.setState(({ drawerOpen }) => ({ drawerOpen: !drawerOpen }))}
                                     iconStyle={{ color: '#FFF' }}
@@ -59,12 +59,21 @@ class TopBar extends PureComponent {
                 }
                 {
                     width <= breakpoint && (
-                        <Drawer 
-                            open={drawerOpen} 
+                        <Drawer
+                            open={drawerOpen}
                             docked={false}
                             onRequestChange={() => this.setState(({ drawerOpen }) => ({ drawerOpen: !drawerOpen }))}
                         >
-                            <Menu />
+                            <div className={classes.logoHolder}>
+                                <img
+                                    src="/img/heddb-logo.png"
+                                    alt="Hoje é dia de Blues"
+                                    className={classes.logo}
+                                />
+                            </div>
+                            <Menu 
+                                onItemSelected={() => this.setState(({ drawerOpen }) => ({ drawerOpen: !drawerOpen }))}
+                            />
                         </Drawer>
                     )
                 }
@@ -109,6 +118,19 @@ const styles = {
             height: '200px',
             // position: 'sticky',
             // top: 0
+        }
+    },
+    logoHolder: {
+        backgroundColor: '#2F2E33',
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100px',
+        position: 'sticky',
+        top: 0,
+        '& img': {
+            position: 'static !important'
         }
     },
     logo: {

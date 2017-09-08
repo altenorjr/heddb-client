@@ -4,6 +4,8 @@ import { List } from 'immutable';
 import jss from 'react-jss';
 import DropDown from './DropDown';
 
+import breakpoint from '../breakpoint';
+
 const GenericFilter = () => ({
     classes,
     data,
@@ -25,7 +27,11 @@ const CreateGenericFilter = () => jss({
     holder: {
         width: '100%',
         display: 'flex',
-        justifyContent: 'flex-start'
+        height: '75px',
+        justifyContent: 'flex-start',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            height: '50px'
+        }
     }
 })(GenericFilter());
 
@@ -45,18 +51,6 @@ export const createBoundFilter = (modelName, metadataKey, selectedKey, selectFun
 
     return connect(mapStateToProps, mapDispatchToProps, mergeProps)(CreateGenericFilter());
 };
-
-let FilterGroup = ({
-    classes
-}) => {
-    
-};
-
-FilterGroup = jss({
-
-})(FilterGroup);
-
-export { FilterGroup };
 
 export const StateFilter = (modelName) => createBoundFilter(modelName, 'states', 'selectedState', 'selectState');
 export const MonthFilter = (modelName) => createBoundFilter(modelName, 'months', 'selectedMonth', 'selectMonth');

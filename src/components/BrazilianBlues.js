@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import jss from 'react-jss';
+import cx from 'classnames';
 import { List } from 'immutable';
 
 import RefreshIndicator from 'material-ui/RefreshIndicator';
@@ -10,6 +11,7 @@ import Bands from './Bands';
 import FilteredContainer from './FilteredContainer';
 import { createBoundFilter } from './GenericFilter';
 
+import breakpoint from '../breakpoint';
 
 import {
     selectState,
@@ -18,7 +20,7 @@ import {
 
 const StatesFilter = createBoundFilter('Bands', 'states', 'selectedState', 'selectState');
 
-class UglyBrazilianBlues extends PureComponent {
+class BrazilianBlues extends PureComponent {
     static propTypes = {
         states: PropTypes.instanceOf(List),
         bands: PropTypes.instanceOf(List),
@@ -72,7 +74,7 @@ class UglyBrazilianBlues extends PureComponent {
                 {
                     selectedState === 'all' && (
                         this.groupedBands().map(({ title, bands }, i) => (
-                            <div key={i} className={classes.bands}>
+                            <div key={i} className={cx(classes.bands, classes.all)}>
                                 <h1 className={classes.title}>{title}</h1>
                                 <Bands
                                     title={title}
@@ -90,7 +92,7 @@ class UglyBrazilianBlues extends PureComponent {
     }
 }
 
-const styles = {
+BrazilianBlues = jss({
     brazilianBlues: {
         display: 'flex',
         flexDirection: 'column',
@@ -101,6 +103,9 @@ const styles = {
     bands: {
         width: '100%'
     },
+    all: {
+        marginTop: '-75px'
+    },
     title: {
         display: 'flex',
         justifyContent: 'flex-end',
@@ -109,14 +114,16 @@ const styles = {
         margin: 0,
         padding: '0 20px',
         position: 'sticky',
-        top: '198px',
+        top: '200px',
         zIndex: 6,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            top: '147px',
+            backgroundColor: 'rgba(255, 255, 255, .85)',
+            zIndex: 4
+        }
     }
-};
-
-
-const BrazilianBlues = jss(styles)(UglyBrazilianBlues);
+})(BrazilianBlues);
 
 const mapStateToProps = (state) => ({
     states: state.getIn(['bands', 'states'], new List()),
