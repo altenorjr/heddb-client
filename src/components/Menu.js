@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import jss from 'react-jss';
 import cx from 'classnames';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import Panel from './Panel';
 import Holder from './Holder';
 import Popover from './Popover';
 import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import ArrowUpIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 
 import breakpoint from '../breakpoint';
 
@@ -16,12 +17,22 @@ import { getList } from '../redux/Articles';
 
 import { websitePaths } from '../paths';
 
-class Menu extends Component {
+class Menu extends PureComponent {
     componentDidMount = this.props.getList();
 
-    shouldComponentUpdate = () => {
-        return true;
-    }
+    // shouldComponentUpdate = (next) => {
+    //     const should = next.location.pathname !== this.props.location.pathname;
+
+    //     console.log({
+    //         should,
+    //         next: next,
+    //         current: this.props,
+    //         nextPathName: next.location.pathname,
+    //         currentPathName: this.props.location.pathname
+    //     });
+
+    //     return true;
+    // }
 
     render = () => {
         const {
@@ -65,10 +76,15 @@ class Menu extends Component {
                     <li className={classes.menuItem}>
                         <Popover
                             contentClassName={classes.articles}
-                            title={(
+                            title={({ open }) => (
                                 <div className={classes.articles}>
                                     Artigos
-                                    <ArrowDownIcon />
+                                    {
+                                        !open && <ArrowDownIcon />
+                                    }
+                                    {
+                                        open && <ArrowUpIcon />
+                                    }
                                 </div>
                             )}
                         >
@@ -145,6 +161,9 @@ Menu = jss({
         padding: '20px 0',
         fontSize: '30px',
         color: '#666',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            width: '100%'
+        }
     },
     articles: {
         display: 'flex',
@@ -192,12 +211,12 @@ Menu = jss({
             transform: 'scale(1.1)'
         }
     }
-})(withRouter(Menu));
+})(Menu);
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
     articles: state.getIn(['articles', 'list', 'article'], new List()),
     pages: state.getIn(['articles', 'list', 'page'], new List()),
-    loading: state.getIn(['articles', 'loading'], false),
+    loading: state.getIn(['articles', 'loading'], false)
 });
 
 const mapDispatchToProps = {

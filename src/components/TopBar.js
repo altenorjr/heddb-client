@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import jss from 'react-jss';
 import Drawer from 'material-ui/Drawer';
 
@@ -21,7 +22,7 @@ class TopBar extends PureComponent {
     }
 
     render = () => {
-        const { classes, width } = this.props;
+        const { classes, width, location } = this.props;
 
         const { drawerOpen } = this.state;
 
@@ -54,7 +55,7 @@ class TopBar extends PureComponent {
                 </Holder>
                 {
                     width > breakpoint && (
-                        <Menu />
+                        <Menu location={location} />
                     )
                 }
                 {
@@ -62,6 +63,7 @@ class TopBar extends PureComponent {
                         <Drawer
                             open={drawerOpen}
                             docked={false}
+                            width="90%"
                             onRequestChange={() => this.setState(({ drawerOpen }) => ({ drawerOpen: !drawerOpen }))}
                         >
                             <div className={classes.logoHolder}>
@@ -71,7 +73,8 @@ class TopBar extends PureComponent {
                                     className={classes.logo}
                                 />
                             </div>
-                            <Menu 
+                            <Menu
+                                location={location}
                                 onItemSelected={() => this.setState(({ drawerOpen }) => ({ drawerOpen: !drawerOpen }))}
                             />
                         </Drawer>
@@ -161,8 +164,9 @@ const styles = {
 
 TopBar = jss(styles)(TopBar);
 
-const mapStateToProps = (state) => ({
-    width: state.getIn(['dimensions', 'width'])
+const mapStateToProps = (state, ownProps) => ({
+    width: state.getIn(['dimensions', 'width']),
+    location: state.get('location', ownProps.location)
 });
 
-export default connect(mapStateToProps)(TopBar);
+export default withRouter(connect(mapStateToProps)(TopBar));

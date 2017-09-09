@@ -8,6 +8,7 @@ import events from './Events';
 import venues from './Venues';
 import articles from './Articles';
 import ads from './Ads';
+import location from './location';
 
 const reducer = combineReducers({
     authentication,
@@ -17,7 +18,8 @@ const reducer = combineReducers({
     events,
     venues,
     articles,
-    ads
+    ads,
+    location
 });
 
 export default reducer;

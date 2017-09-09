@@ -6,6 +6,8 @@ import { Provider } from 'react-redux';
 import Website from './Website';
 import Admin from './Admin';
 
+import LocationSpy from './LocationSpy';
+
 import store from '../redux/store';
 
 class App extends Component {
@@ -13,10 +15,12 @@ class App extends Component {
     <Provider store={store}>
       <MuiThemeProvider>
         <BrowserRouter>
-          <Switch>
-            <Route path="/admin" component={Admin} />
-            <Route path="/" component={Website} />
-          </Switch>
+          <LocationSpy>
+            <Switch>
+              <Route path="/admin" component={Admin} />
+              <Route path="/" component={Website} />
+            </Switch>
+          </LocationSpy>
         </BrowserRouter>
       </MuiThemeProvider>
     </Provider>

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { List } from 'immutable';
 import ArrowDownIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import ArrowUpIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 
 import breakpoint from '../breakpoint';
 
@@ -40,9 +41,14 @@ class DropDown extends Component {
         return (
             <Popover
                 className={cx(className, classes.dropdown)}
-                title={(
+                title={({ open }) => (
                     <div className={cx(classes.item, classes.selectedItemHolder)}>
-                        <ArrowDownIcon className={classes.arrowDown} />
+                        {
+                            !open && <ArrowDownIcon className={classes.arrow} />
+                        }
+                        {
+                            open && <ArrowUpIcon className={classes.arrow} />
+                        }
                         <span className={cx(classes.selectedItem, classes.title)}>
                             &nbsp;{findSelectedValueText(items, selectedValue)}&nbsp;
                         </span>
@@ -94,7 +100,7 @@ export default jss({
     selectedItem: {
         order: ({ align }) => align !== 'right' ? 0 : 1
     },
-    arrowDown: {
+    arrow: {
         order: ({ align }) => align !== 'right' ? 1 : 0
     },
     item: {
