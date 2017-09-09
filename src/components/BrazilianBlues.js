@@ -11,7 +11,7 @@ import Bands from './Bands';
 import FilteredContainer from './FilteredContainer';
 import { createBoundFilter } from './GenericFilter';
 
-import breakpoint from '../breakpoint';
+import breakpoint, { vertical as verticalBreakpoint } from '../breakpoint';
 
 import {
     selectState,
@@ -120,6 +120,9 @@ BrazilianBlues = jss({
         top: '200px',
         zIndex: 6,
         pointerEvents: 'none',
+        [`@media (max-height: ${verticalBreakpoint}px)`]: {
+            position: 'static'
+        },
         [`@media (max-width: ${breakpoint}px)`]: {
             top: '146px',
             backgroundColor: 'rgba(255, 255, 255, .85)',
