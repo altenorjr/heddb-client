@@ -9,9 +9,7 @@ import CRUDEditorPureComponent from './@next/CRUDEditorPureComponent';
 
 import AdminCrudEditor from './AdminCRUDEditor';
 
-const validate = () => {
-    const { data } = this.state
-
+const validate = (props, { data }) => {
     const
         objectId = data.get('objectId', ''),
         name = data.get('name', ''),

@@ -1,19 +1,18 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
-import jss from 'react-jss';
 import Drawer from 'material-ui/Drawer';
 
 import AdminPageWithTopBar from './AdminPageWithTopBar';
 
-class AdminCRUDPageUgly extends PureComponent {
+class AdminCRUDPage extends PureComponent {
     static propTypes = {
         title: PropTypes.string,
         onRequestAdd: PropTypes.func.isRequired,
         onCloseEditor: PropTypes.func.isRequired,
         editor: PropTypes.node.isRequired,
         editorOpen: PropTypes.bool.isRequired,
-        editorWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        editorWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        width: PropTypes.number.isRequired
     }
 
     static defaultProps = {
@@ -30,7 +29,6 @@ class AdminCRUDPageUgly extends PureComponent {
             className,
             contentClassName,
             editorWidth,
-            classes
         } = this.props;
 
         return (
@@ -49,18 +47,12 @@ class AdminCRUDPageUgly extends PureComponent {
                     {editor}
                 </Drawer>
 
-                <div className={cx(classes.body, contentClassName)}>
+                <div className={contentClassName}>
                     {this.props.children}
                 </div>
             </AdminPageWithTopBar>
         )
     }
 }
-
-const AdminCRUDPage = jss({
-    body: {
-
-    }
-})(AdminCRUDPageUgly);
 
 export default AdminCRUDPage;

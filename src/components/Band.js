@@ -115,7 +115,7 @@ export default jss({
         order: 3,
         [`@media (max-width: ${breakpoint}px)`]: {
             order: 0,
-            width: '100vw',
+            width: ({ showEditControls = false }) => showEditControls ? '100%' : '100vw',
             height: '56vw'
         }
     }

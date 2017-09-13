@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 import jss from 'react-jss';
 import cx from 'classnames';
 import { connect } from 'react-redux';
@@ -7,9 +8,11 @@ import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import AddIcon from 'material-ui/svg-icons/content/add';
 
+import breakpoint from '../breakpoint';
+
 import { toggleDrawerOpened as onToggleDrawer } from '../redux/drawer';
 
-class UglyAdminPageWithTopBar extends PureComponent {
+class AdminPageWithTopBar extends PureComponent {
     static PropTypes = {
         title: PropTypes.string.isRequired,
         rightIcon: PropTypes.node,
@@ -56,7 +59,7 @@ class UglyAdminPageWithTopBar extends PureComponent {
     }
 }
 
-const AdminPageWithTopBar = jss({
+AdminPageWithTopBar = jss({
     page: {
         display: 'flex',
         flexDirection: 'column'
@@ -67,9 +70,12 @@ const AdminPageWithTopBar = jss({
     },
     content: {
         minHeight: '100vh',
-        padding: '24px'
+        padding: '24px',
+        [`@media (max-width: ${breakpoint}px)`]: {
+            padding: 0
+        }
     }
-})(UglyAdminPageWithTopBar);
+})(AdminPageWithTopBar);
 
 const mapStateToProps = (state) => ({
     drawerOpen: state.getIn(['drawer', 'isOpen']),
